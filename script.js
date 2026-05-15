@@ -5,6 +5,19 @@ function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
 
+function hasStylesheetByHref(part) {
+  return Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some((link) => link.href && link.href.includes(part));
+}
+
+function appendStylesheet(href, dataName) {
+  if (hasStylesheetByHref(href)) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  if (dataName) link.dataset[dataName] = 'true';
+  document.head.appendChild(link);
+}
+
 function loadMetrika() {
   if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
@@ -15,12 +28,8 @@ function loadMetrika() {
 }
 
 function loadPremiumUi() {
-  if (document.querySelector('link[data-premium-ui]') || document.querySelector('link[href$="/premium-ui.css"]')) return;
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = '/premium-ui.css';
-  link.dataset.premiumUi = 'true';
-  document.head.appendChild(link);
+  appendStylesheet('/premium-ui.css', 'premiumUi');
+  appendStylesheet('/design-system-fixes.css', 'designSystemFixes');
 }
 
 function loadSupabasePublic() {
