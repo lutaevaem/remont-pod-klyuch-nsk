@@ -18,6 +18,15 @@ function appendStylesheet(href, dataName) {
   document.head.appendChild(link);
 }
 
+function appendScript(src, dataName, defer = true) {
+  if (hasScriptBySrc(src)) return;
+  const script = document.createElement('script');
+  script.src = src;
+  script.defer = defer;
+  if (dataName) script.dataset[dataName] = 'true';
+  document.head.appendChild(script);
+}
+
 function loadMetrika() {
   if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
@@ -30,6 +39,8 @@ function loadMetrika() {
 function loadPremiumUi() {
   appendStylesheet('/premium-ui.css', 'premiumUi');
   appendStylesheet('/design-system-fixes.css', 'designSystemFixes');
+  appendStylesheet('/premium-motion.css', 'premiumMotion');
+  appendScript('/premium-motion.js', 'premiumMotionScript');
 }
 
 function loadSupabasePublic() {
