@@ -1,0 +1,190 @@
+/* Premium bottom area and legal UX */
+.lead-form .legal-consents{
+  display:grid;
+  gap:12px;
+  margin:2px 0 4px;
+  padding:18px 18px 16px;
+  border:1px solid #eadcc7;
+  border-radius:22px;
+  background:linear-gradient(135deg,#fffaf2,#f7efe4);
+}
+
+.lead-form .consent-line{
+  display:grid!important;
+  grid-template-columns:22px 1fr;
+  gap:12px;
+  align-items:flex-start;
+  color:#5c5248!important;
+  font-weight:600!important;
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+
+.lead-form .consent-line input{
+  appearance:none;
+  width:18px!important;
+  height:18px!important;
+  margin:2px 0 0!important;
+  border:1px solid #c9aa72!important;
+  border-radius:6px!important;
+  background:#fff!important;
+  cursor:pointer;
+  position:relative;
+}
+
+.lead-form .consent-line input:checked{
+  background:#caa15a!important;
+  border-color:#caa15a!important;
+}
+
+.lead-form .consent-line input:checked::after{
+  content:'✓';
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#17120a;
+  font-size:13px;
+  font-weight:900;
+}
+
+.lead-form .consent-line a{
+  color:#8f662d;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+}
+
+.lead-form .legal-note,
+.lead-form .form-note{
+  color:#8a7f73!important;
+  font-size:13px!important;
+  line-height:1.55;
+}
+
+.footer{
+  position:relative;
+  padding:0!important;
+  background:radial-gradient(circle at 18% 0%,rgba(202,161,90,.16),transparent 34%),linear-gradient(180deg,#11100e 0%,#070604 100%)!important;
+  color:#d8d0c3!important;
+  border-top:1px solid rgba(202,161,90,.22);
+}
+
+.footer::before{
+  content:'';
+  display:block;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(202,161,90,.58),transparent);
+}
+
+.footer-grid{
+  display:grid!important;
+  grid-template-columns:minmax(240px,.9fr) minmax(170px,.5fr) minmax(420px,1.15fr);
+  gap:34px!important;
+  align-items:start!important;
+  padding:42px 0 36px;
+}
+
+.footer-grid > span{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  color:#f6efe4;
+  font-size:18px;
+  line-height:1.25;
+  font-weight:800;
+}
+
+.footer-grid > span::after{
+  content:'Строительство, ремонт и комплектация под ключ в Новосибирске';
+  max-width:300px;
+  color:#a79b8d;
+  font-size:13px;
+  font-weight:500;
+  line-height:1.55;
+}
+
+.footer-grid > a{
+  justify-self:start;
+  display:inline-flex;
+  min-height:44px;
+  align-items:center;
+  justify-content:center;
+  padding:0 18px;
+  border:1px solid rgba(202,161,90,.35);
+  border-radius:999px;
+  color:#e0bb72!important;
+  background:rgba(255,255,255,.03);
+  font-weight:800;
+}
+
+.footer-grid > a:hover{
+  background:rgba(202,161,90,.1);
+}
+
+.legal-footer-links{
+  display:grid!important;
+  grid-template-columns:1fr 1fr;
+  gap:10px 18px!important;
+  max-width:none!important;
+  font-size:13px!important;
+  line-height:1.35;
+}
+
+.legal-footer-links::before{
+  content:'Документы и реквизиты';
+  grid-column:1/-1;
+  margin-bottom:4px;
+  color:#e0bb72;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  font-size:12px;
+}
+
+.legal-footer-links a{
+  color:#b9b0a2!important;
+  text-decoration:none!important;
+  border-bottom:1px solid rgba(202,161,90,.22);
+  padding-bottom:7px;
+}
+
+.legal-footer-links a:hover{
+  color:#f6efe4!important;
+  border-bottom-color:#caa15a;
+}
+
+.cookie-banner{
+  border-radius:24px!important;
+  background:rgba(12,11,9,.96)!important;
+  border:1px solid rgba(202,161,90,.34)!important;
+}
+
+@media(max-width:980px){
+  .footer-grid{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .legal-footer-links{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:640px){
+  .lead-form .legal-consents{
+    padding:14px;
+    border-radius:18px;
+  }
+  .lead-form .consent-line{
+    font-size:12px!important;
+  }
+  .footer-grid{
+    grid-template-columns:1fr!important;
+    padding:34px 0 110px;
+  }
+  .legal-footer-links{
+    grid-template-columns:1fr!important;
+  }
+  .footer-grid > a{
+    width:100%;
+  }
+}
