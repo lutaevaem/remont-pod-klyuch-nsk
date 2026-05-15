@@ -23,7 +23,7 @@
       </nav>
       <div class="admin-sidebar-note">
         <b>Supabase подключён</b>
-        <p>Проекты и фото будут храниться в базе и Storage. Для публикации нужны таблицы и политики доступа.</p>
+        <p>Проекты, фото и тексты сайта хранятся в базе и управляются через админку.</p>
       </div>
     </aside>
 
@@ -45,75 +45,41 @@
         <div class="admin-grid">
           <form class="admin-card admin-form" id="project-form">
             <input type="hidden" name="id">
-            <div class="card-head">
-              <div>
-                <p class="eyebrow">Проекты</p>
-                <h2 id="project-form-title">Добавить проект</h2>
-              </div>
-              <button type="button" id="reset-project-form">Очистить</button>
-            </div>
-
+            <div class="card-head"><div><p class="eyebrow">Проекты</p><h2 id="project-form-title">Добавить проект</h2></div><button type="button" id="reset-project-form">Очистить</button></div>
             <label>Название проекта<input name="title" required placeholder="Например: Квартира 82 м² в Заельцовском районе"></label>
-            <div class="two-cols">
-              <label>Тип проекта<select name="category" required><option value="apartment">Квартира</option><option value="house">Дом</option><option value="building">Строительство</option><option value="commercial">Коммерция</option><option value="furnishing">Комплектация</option></select></label>
-              <label>Площадь<input name="area" placeholder="82 м²"></label>
-            </div>
-            <div class="two-cols">
-              <label>Район / город<input name="location" placeholder="Новосибирск, Заельцовский район"></label>
-              <label>Сроки<input name="timeline" placeholder="Например: 4 месяца"></label>
-            </div>
+            <div class="two-cols"><label>Тип проекта<select name="category" required><option value="apartment">Квартира</option><option value="house">Дом</option><option value="building">Строительство</option><option value="commercial">Коммерция</option><option value="furnishing">Комплектация</option></select></label><label>Площадь<input name="area" placeholder="82 м²"></label></div>
+            <div class="two-cols"><label>Район / город<input name="location" placeholder="Новосибирск, Заельцовский район"></label><label>Сроки<input name="timeline" placeholder="Например: 4 месяца"></label></div>
             <label>Стартовая точка<textarea name="start_point" placeholder="Черновая отделка, коробка дома, начатый ремонт..."></textarea></label>
             <label>Задача клиента<textarea name="client_task" placeholder="Что нужно было получить на выходе"></textarea></label>
             <label>Что сделали<textarea name="scope" placeholder="Ремонт, материалы, мебель, техника, свет, клининг..."></textarea></label>
             <label>Результат<textarea name="result" placeholder="Какой финал получил клиент"></textarea></label>
             <label>Отзыв клиента<textarea name="review" placeholder="Можно добавить позже"></textarea></label>
-
-            <div class="two-cols">
-              <label>Порядок показа<input name="sort_order" type="number" value="100"></label>
-              <label class="checkbox-label"><input name="is_published" type="checkbox" checked> <span>Публиковать на сайте</span></label>
-            </div>
-
-            <div class="photo-manager">
-              <div class="photo-manager-head">
-                <div>
-                  <p class="eyebrow">Фото проекта</p>
-                  <h3>Разложите фото по смыслу</h3>
-                </div>
-                <p>Так сайт поймёт, что показывать как обложку, “до”, “процесс” и “после”.</p>
-              </div>
-              <div class="photo-grid-inputs">
-                <label>Обложка проекта<input name="photo_cover" type="file" accept="image/*"></label>
-                <label>До<input name="photo_before" type="file" accept="image/*"></label>
-                <label>Концепция / дизайн<input name="photo_concept" type="file" accept="image/*"></label>
-                <label>Процесс<input name="photo_process" type="file" accept="image/*"></label>
-                <label>После<input name="photo_after" type="file" accept="image/*"></label>
-                <label>Дополнительные фото<input name="photo_extra" type="file" accept="image/*" multiple></label>
-              </div>
-              <div class="existing-images" id="existing-images"></div>
-            </div>
-
+            <div class="two-cols"><label>Порядок показа<input name="sort_order" type="number" value="100"></label><label class="checkbox-label"><input name="is_published" type="checkbox" checked> <span>Публиковать на сайте</span></label></div>
+            <div class="photo-manager"><div class="photo-manager-head"><div><p class="eyebrow">Фото проекта</p><h3>Разложите фото по смыслу</h3></div><p>Так сайт поймёт, что показывать как обложку, “до”, “процесс” и “после”.</p></div><div class="photo-grid-inputs"><label>Обложка проекта<input name="photo_cover" type="file" accept="image/*"></label><label>До<input name="photo_before" type="file" accept="image/*"></label><label>Концепция / дизайн<input name="photo_concept" type="file" accept="image/*"></label><label>Процесс<input name="photo_process" type="file" accept="image/*"></label><label>После<input name="photo_after" type="file" accept="image/*"></label><label>Дополнительные фото<input name="photo_extra" type="file" accept="image/*" multiple></label></div><div class="existing-images" id="existing-images"></div></div>
             <button class="primary" type="submit">Сохранить проект</button>
           </form>
-
-          <div class="admin-card">
-            <div class="card-head">
-              <div><p class="eyebrow">Список</p><h2>Проекты на сайте</h2></div>
-            </div>
-            <div class="project-list" id="project-list"></div>
-          </div>
+          <div class="admin-card"><div class="card-head"><div><p class="eyebrow">Список</p><h2>Проекты на сайте</h2></div></div><div class="project-list" id="project-list"></div></div>
         </div>
       </section>
 
       <section class="admin-view" id="view-content">
-        <div class="admin-card narrow-card">
-          <p class="eyebrow">Следующий этап</p>
-          <h2>Редактирование текстов сайта</h2>
-          <p>Этот раздел подготовлен под следующий шаг. Сначала запускаем проекты и фото, затем подключаем безопасные поля для текстов: главная, услуги, контакты, CTA и SEO.</p>
-          <ul>
-            <li>Главная: H1, подзаголовок, преимущества, блок Александра.</li>
-            <li>Услуги: заголовки, описания, преимущества, CTA.</li>
-            <li>Контакты: тексты, подсказки, контактные данные.</li>
-          </ul>
+        <div class="admin-grid content-admin-grid">
+          <form class="admin-card admin-form" id="content-form">
+            <input type="hidden" name="id">
+            <div class="card-head"><div><p class="eyebrow">Тексты сайта</p><h2 id="content-form-title">Редактировать поле</h2></div><button type="button" id="reset-content-form">Очистить</button></div>
+            <label>Страница<select name="page" required><option value="home">Главная</option><option value="projects">Проекты</option><option value="renovation">Ремонт</option><option value="construction">Строительство</option><option value="furnishing">Комплектация</option><option value="contacts">Контакты</option><option value="global">Общее</option></select></label>
+            <label>Ключ поля<input name="content_key" required placeholder="Например: projects.hero.title"></label>
+            <label>Название для админки<input name="label" required placeholder="Например: Заголовок первого экрана"></label>
+            <label>Тип поля<select name="field_type"><option value="textarea">Большой текст</option><option value="text">Короткий текст</option></select></label>
+            <label>Текст<textarea name="value" required placeholder="Введите текст, который должен отображаться на сайте"></textarea></label>
+            <div class="two-cols"><label>Порядок<input name="sort_order" type="number" value="100"></label><label class="checkbox-label"><input name="is_active" type="checkbox" checked> <span>Активно</span></label></div>
+            <button class="primary" type="submit">Сохранить текст</button>
+          </form>
+          <div class="admin-card">
+            <div class="card-head"><div><p class="eyebrow">Список</p><h2>Редактируемые тексты</h2></div><button type="button" id="refresh-content">Обновить</button></div>
+            <div class="content-filters"><button class="active" type="button" data-content-page="all">Все</button><button type="button" data-content-page="home">Главная</button><button type="button" data-content-page="projects">Проекты</button><button type="button" data-content-page="renovation">Ремонт</button><button type="button" data-content-page="construction">Строительство</button><button type="button" data-content-page="furnishing">Комплектация</button><button type="button" data-content-page="contacts">Контакты</button></div>
+            <div class="content-list" id="content-list"></div>
+          </div>
         </div>
       </section>
 
