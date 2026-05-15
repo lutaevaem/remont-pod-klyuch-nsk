@@ -176,7 +176,7 @@ function normalizeLeadPayload(payload) {
     phone: payload.phone || null,
     email: payload.email || null,
     object_type: payload.object_type || payload.type || null,
-    work_format: payload.work_format || payload.format || null,
+    work_format: payload.work_format || payload.format || payload.service || null,
     area_location_comment: payload.area_location_comment || payload.comment || payload.message || null,
     page_url: payload.page || window.location.href,
     utm: payload.utm || {},
