@@ -10,6 +10,15 @@ function loadMetrika() {
   document.head.appendChild(script);
 }
 
+function loadPremiumUi() {
+  if (document.querySelector('link[data-premium-ui]')) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/premium-ui.css';
+  link.dataset.premiumUi = 'true';
+  document.head.appendChild(link);
+}
+
 function reachGoal(goalName, params = {}) {
   if (typeof window.sendMetricGoal === 'function') {
     window.sendMetricGoal(goalName, params);
@@ -105,6 +114,7 @@ function initCookieBanner() {
   });
 }
 
+loadPremiumUi();
 loadMetrika();
 initProjectFilters();
 injectLegalFooterLinks();
