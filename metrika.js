@@ -1,28 +1,32 @@
 const METRIKA_COUNTER_ID = 109227622;
 
-(function initMetricCounter() {
-  if (window.ym) return;
-  const metricUrl = ['https://mc.yandex.ru', '/metrika/tag.js'].join('');
+(function initMetricCounter(m, e, t, r, i, k, a) {
+  if (typeof window.ym === 'function') return;
 
-  (function (m, e, t, r, i, k, a) {
-    m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
-    m[i].l = 1 * new Date();
-    k = e.createElement(t);
-    a = e.getElementsByTagName(t)[0];
-    k.async = 1;
-    k.src = r;
-    a.parentNode.insertBefore(k, a);
-  })(window, document, 'script', metricUrl, 'ym');
+  m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
+  m[i].l = 1 * new Date();
 
-  window.ym(METRIKA_COUNTER_ID, 'init', {
-    ssr: true,
-    webvisor: true,
-    clickmap: true,
-    ecommerce: 'dataLayer',
-    accurateTrackBounce: true,
-    trackLinks: true,
-  });
-})();
+  for (let j = 0; j < document.scripts.length; j += 1) {
+    if (document.scripts[j].src === r) return;
+  }
+
+  k = e.createElement(t);
+  a = e.getElementsByTagName(t)[0];
+  k.async = 1;
+  k.src = r;
+  a.parentNode.insertBefore(k, a);
+})(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=109227622', 'ym');
+
+window.ym(METRIKA_COUNTER_ID, 'init', {
+  ssr: true,
+  webvisor: true,
+  clickmap: true,
+  ecommerce: 'dataLayer',
+  referrer: document.referrer,
+  url: location.href,
+  accurateTrackBounce: true,
+  trackLinks: true,
+});
 
 window.sendMetricGoal = function sendMetricGoal(goalName, params = {}) {
   if (typeof window.ym === 'function') {
