@@ -39,6 +39,13 @@ function loadSupabasePublic() {
     contentScript.dataset.siteContent = 'true';
     document.head.appendChild(contentScript);
   }
+  if (!document.querySelector('script[data-site-seo]')) {
+    const seoScript = document.createElement('script');
+    seoScript.src = '/site-seo.js';
+    seoScript.defer = true;
+    seoScript.dataset.siteSeo = 'true';
+    document.head.appendChild(seoScript);
+  }
 }
 
 function getPageKind() {
@@ -50,9 +57,7 @@ function getPageKind() {
 }
 
 function reachGoal(goalName, params = {}) {
-  if (typeof window.sendMetricGoal === 'function') {
-    window.sendMetricGoal(goalName, params);
-  }
+  if (typeof window.sendMetricGoal === 'function') window.sendMetricGoal(goalName, params);
 }
 
 function collectUtm() {
@@ -75,8 +80,7 @@ function initProjectFilters() {
       button.classList.add('active');
       projectItems.forEach((item) => {
         const categories = item.dataset.category.split(' ');
-        const shouldShow = filter === 'all' || categories.includes(filter);
-        item.hidden = !shouldShow;
+        item.hidden = !(filter === 'all' || categories.includes(filter));
       });
       reachGoal('project_filter_click', { filter });
     });
@@ -89,21 +93,10 @@ function injectFooterStructure() {
     const currentTopLink = footer.querySelector(':scope > a');
     const contacts = document.createElement('div');
     contacts.className = 'footer-contact-links';
-    contacts.innerHTML = `
-      <a href="tel:+79137998808">+7 (913) 799-88-08</a>
-      <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
-      <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
-      <a href="mailto:i@usoltsev-top.ru">i@usoltsev-top.ru</a>
-    `;
+    contacts.innerHTML = `<a href="tel:+79137998808">+7 (913) 799-88-08</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a><a href="mailto:i@usoltsev-top.ru">i@usoltsev-top.ru</a>`;
     const siteLinks = document.createElement('div');
     siteLinks.className = 'footer-site-links';
-    siteLinks.innerHTML = `
-      <a href="/projects/">Проекты</a>
-      <a href="/services/remont-pod-klyuch/">Ремонт под ключ</a>
-      <a href="/services/stroitelstvo-pod-klyuch/">Строительство</a>
-      <a href="/services/komplektatsiya-obekta/">Комплектация</a>
-      <a href="/contacts/">Контакты</a>
-    `;
+    siteLinks.innerHTML = `<a href="/projects/">Проекты</a><a href="/services/remont-pod-klyuch/">Ремонт под ключ</a><a href="/services/stroitelstvo-pod-klyuch/">Строительство</a><a href="/services/komplektatsiya-obekta/">Комплектация</a><a href="/contacts/">Контакты</a>`;
     if (currentTopLink) currentTopLink.replaceWith(contacts);
     else footer.appendChild(contacts);
     footer.appendChild(siteLinks);
@@ -115,13 +108,7 @@ function injectLegalFooterLinks() {
     if (footer.querySelector('.legal-footer-links')) return;
     const links = document.createElement('div');
     links.className = 'legal-footer-links';
-    links.innerHTML = `
-      <a href="/privacy/">Политика обработки персональных данных</a>
-      <a href="/personal-data-consent/">Согласие на обработку персональных данных</a>
-      <a href="/marketing-consent/">Согласие на рекламно-информационные материалы</a>
-      <a href="/terms/">Пользовательское соглашение</a>
-      <a href="/requisites/">Реквизиты</a>
-    `;
+    links.innerHTML = `<a href="/privacy/">Политика обработки персональных данных</a><a href="/personal-data-consent/">Согласие на обработку персональных данных</a><a href="/marketing-consent/">Согласие на рекламно-информационные материалы</a><a href="/terms/">Пользовательское соглашение</a><a href="/requisites/">Реквизиты</a>`;
     footer.appendChild(links);
   });
 }
@@ -129,40 +116,13 @@ function injectLegalFooterLinks() {
 function injectFinalCta() {
   const kind = getPageKind();
   if (kind === 'legal') return;
-
   document.querySelectorAll('main').forEach((main) => {
     if (main.querySelector('.site-final-cta')) return;
     const finalCta = document.createElement('section');
     finalCta.className = kind === 'contacts' ? 'site-final-cta contacts-final-cta' : 'site-final-cta';
     finalCta.innerHTML = kind === 'contacts'
-      ? `
-        <div class="container final-cta-inner">
-          <div>
-            <p class="final-cta-kicker">Быстрый контакт</p>
-            <h2 class="final-cta-title">Можно начать с короткого сообщения</h2>
-            <p class="final-cta-text">Отправьте фото или видео объекта, площадь, район и желаемый результат. Этого достаточно, чтобы понять стартовую точку и предложить следующий шаг.</p>
-          </div>
-          <div class="final-cta-actions">
-            <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Написать в Telegram</a>
-            <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
-            <a href="tel:+79137998808">Позвонить</a>
-          </div>
-        </div>
-      `
-      : `
-        <div class="container final-cta-inner">
-          <div>
-            <p class="final-cta-kicker">Следующий шаг</p>
-            <h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2>
-            <p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p>
-          </div>
-          <div class="final-cta-actions">
-            <a href="/contacts/">Оставить заявку</a>
-            <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
-            <a href="tel:+79137998808">Позвонить</a>
-          </div>
-        </div>
-      `;
+      ? `<div class="container final-cta-inner"><div><p class="final-cta-kicker">Быстрый контакт</p><h2 class="final-cta-title">Можно начать с короткого сообщения</h2><p class="final-cta-text">Отправьте фото или видео объекта, площадь, район и желаемый результат. Этого достаточно, чтобы понять стартовую точку и предложить следующий шаг.</p></div><div class="final-cta-actions"><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Написать в Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a><a href="tel:+79137998808">Позвонить</a></div></div>`
+      : `<div class="container final-cta-inner"><div><p class="final-cta-kicker">Следующий шаг</p><h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2><p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p></div><div class="final-cta-actions"><a href="/contacts/">Оставить заявку</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="tel:+79137998808">Позвонить</a></div></div>`;
     main.appendChild(finalCta);
   });
 }
@@ -174,17 +134,7 @@ function injectFormConsents() {
     if (!submitButton) return;
     const consents = document.createElement('div');
     consents.className = 'legal-consents';
-    consents.innerHTML = `
-      <label class="consent-line">
-        <input type="checkbox" name="personal_data_consent" required>
-        <span>Я даю <a href="/personal-data-consent/" target="_blank">согласие на обработку персональных данных</a> и соглашаюсь с <a href="/privacy/" target="_blank">Политикой обработки персональных данных</a>.</span>
-      </label>
-      <label class="consent-line">
-        <input type="checkbox" name="marketing_consent" value="yes">
-        <span>Согласен(на) получать рекламно-информационные материалы: предложения, новости и полезные материалы о строительстве, ремонте и комплектации объектов. <a href="/marketing-consent/" target="_blank">Подробнее</a>.</span>
-      </label>
-      <p class="legal-note">Данные используются для связи по вашей заявке и подготовки предварительного разбора объекта.</p>
-    `;
+    consents.innerHTML = `<label class="consent-line"><input type="checkbox" name="personal_data_consent" required><span>Я даю <a href="/personal-data-consent/" target="_blank">согласие на обработку персональных данных</a> и соглашаюсь с <a href="/privacy/" target="_blank">Политикой обработки персональных данных</a>.</span></label><label class="consent-line"><input type="checkbox" name="marketing_consent" value="yes"><span>Согласен(на) получать рекламно-информационные материалы: предложения, новости и полезные материалы о строительстве, ремонте и комплектации объектов. <a href="/marketing-consent/" target="_blank">Подробнее</a>.</span></label><p class="legal-note">Данные используются для связи по вашей заявке и подготовки предварительного разбора объекта.</p>`;
     leadForm.insertBefore(consents, submitButton);
   });
 }
@@ -193,10 +143,7 @@ function initCookieBanner() {
   if (localStorage.getItem('cookieConsentAccepted') === 'yes') return;
   const banner = document.createElement('div');
   banner.className = 'cookie-banner';
-  banner.innerHTML = `
-    <p>Мы используем cookie и сервисы аналитики, чтобы сайт работал корректно и помогал улучшать качество сервиса. Продолжая пользоваться сайтом, вы соглашаетесь с использованием cookie. Подробнее — в <a href="/privacy/">Политике обработки персональных данных</a>.</p>
-    <button type="button">Хорошо</button>
-  `;
+  banner.innerHTML = `<p>Мы используем cookie и сервисы аналитики, чтобы сайт работал корректно и помогал улучшать качество сервиса. Продолжая пользоваться сайтом, вы соглашаетесь с использованием cookie. Подробнее — в <a href="/privacy/">Политике обработки персональных данных</a>.</p><button type="button">Хорошо</button>`;
   document.body.appendChild(banner);
   banner.querySelector('button').addEventListener('click', () => {
     localStorage.setItem('cookieConsentAccepted', 'yes');
@@ -228,11 +175,7 @@ if (form) {
     button.textContent = 'Отправляем...';
     if (statusNode) statusNode.textContent = 'Отправляем заявку. Это займёт несколько секунд.';
     try {
-      const response = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!response.ok) throw new Error('Lead request failed');
       form.reset();
       reachGoal('lead_form_submit', payload);
