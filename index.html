@@ -77,9 +77,14 @@
         <p>В проектах важны не только фото «после». Важен маршрут: с чего начали, что взяли на себя, какие решения приняли и каким получился финальный результат.</p>
       </div>
       <div class="container project-filters" aria-label="Фильтры проектов">
-        <button type="button" class="active">Все</button><button type="button">Строительство</button><button type="button">Квартиры</button><button type="button">Дома</button><button type="button">Коммерция</button><button type="button">Комплектация</button>
+        <button type="button" class="active" data-filter="all">Все</button>
+        <button type="button" data-filter="building">Строительство</button>
+        <button type="button" data-filter="apartment">Квартиры</button>
+        <button type="button" data-filter="house">Дома</button>
+        <button type="button" data-filter="commercial">Коммерция</button>
+        <button type="button" data-filter="furnishing">Комплектация</button>
       </div>
-      <div class="container featured-project">
+      <div class="container featured-project project-item" data-category="apartment furnishing">
         <div class="project-gallery editorial-gallery">
           <div><span>До</span></div><div><span>Концепция</span></div><div><span>Процесс</span></div><div><span>После</span></div>
         </div>
@@ -96,9 +101,9 @@
         </div>
       </div>
       <div class="container project-grid-premium">
-        <article class="project-card"><div class="project-photo">Дом с нуля</div><h3>От участка к пространству для жизни</h3><p>Строительство, отделка, комплектация и финальная сдача дома.</p><a href="#contacts">Обсудить похожий маршрут</a></article>
-        <article class="project-card"><div class="project-photo">Квартира под сдачу</div><h3>Готовность к арендатору</h3><p>Ремонт, комплектация, техника, чистота и финал без лишних доработок.</p><a href="#contacts">Подготовить объект</a></article>
-        <article class="project-card"><div class="project-photo">Коммерция</div><h3>Помещение под запуск</h3><p>Планировка, ремонт, функциональность, визуальный стиль и готовность к работе.</p><a href="#contacts">Запустить помещение</a></article>
+        <article class="project-card project-item" data-category="building house"><div class="project-photo">Дом с нуля</div><h3>От участка к пространству для жизни</h3><p>Строительство, отделка, комплектация и финальная сдача дома.</p><a href="#contacts">Обсудить похожий маршрут</a></article>
+        <article class="project-card project-item" data-category="apartment furnishing"><div class="project-photo">Квартира под сдачу</div><h3>Готовность к арендатору</h3><p>Ремонт, комплектация, техника, чистота и финал без лишних доработок.</p><a href="#contacts">Подготовить объект</a></article>
+        <article class="project-card project-item" data-category="commercial"><div class="project-photo">Коммерция</div><h3>Помещение под запуск</h3><p>Планировка, ремонт, функциональность, визуальный стиль и готовность к работе.</p><a href="#contacts">Запустить помещение</a></article>
       </div>
     </section>
 
