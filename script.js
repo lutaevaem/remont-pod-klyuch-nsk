@@ -19,6 +19,28 @@ function loadPremiumUi() {
   document.head.appendChild(link);
 }
 
+function loadSupabasePublic() {
+  if (!document.querySelector('script[data-supabase-cdn]')) {
+    const supabaseScript = document.createElement('script');
+    supabaseScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    supabaseScript.dataset.supabaseCdn = 'true';
+    document.head.appendChild(supabaseScript);
+  }
+  if (!document.querySelector('script[data-supabase-config]')) {
+    const configScript = document.createElement('script');
+    configScript.src = '/supabase-config.js';
+    configScript.dataset.supabaseConfig = 'true';
+    document.head.appendChild(configScript);
+  }
+  if (!document.querySelector('script[data-site-content]')) {
+    const contentScript = document.createElement('script');
+    contentScript.src = '/site-content.js';
+    contentScript.defer = true;
+    contentScript.dataset.siteContent = 'true';
+    document.head.appendChild(contentScript);
+  }
+}
+
 function getPageKind() {
   const path = window.location.pathname;
   const legalPaths = ['/privacy/', '/personal-data-consent/', '/marketing-consent/', '/terms/', '/requisites/'];
@@ -183,6 +205,7 @@ function initCookieBanner() {
 }
 
 loadPremiumUi();
+loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
 injectFooterStructure();
