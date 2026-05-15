@@ -48,6 +48,18 @@ function loadSupabasePublic() {
   }
 }
 
+function waitForSupabasePublic(retries = 80) {
+  return new Promise((resolve) => {
+    const tick = () => {
+      if (window.SUPABASE_CONFIG && window.supabase?.createClient) return resolve(true);
+      retries -= 1;
+      if (retries <= 0) return resolve(false);
+      setTimeout(tick, 100);
+    };
+    tick();
+  });
+}
+
 function getPageKind() {
   const path = window.location.pathname;
   const legalPaths = ['/privacy/', '/personal-data-consent/', '/marketing-consent/', '/terms/', '/requisites/'];
@@ -151,6 +163,27 @@ function initCookieBanner() {
   });
 }
 
+async function saveLeadToSupabase(payload) {
+  const ready = await waitForSupabasePublic();
+  if (!ready) throw new Error('Supabase is not ready');
+  const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.publishableKey);
+  const leadPayload = {
+    name: payload.name || null,
+    phone: payload.phone || null,
+    email: payload.email || null,
+    object_type: payload.object_type || payload.type || null,
+    work_format: payload.work_format || payload.format || null,
+    area_location_comment: payload.area_location_comment || payload.comment || payload.message || null,
+    page_url: payload.page || window.location.href,
+    utm: payload.utm || {},
+    personal_data_consent: Boolean(payload.personal_data_consent),
+    marketing_consent: Boolean(payload.marketing_consent),
+    status: 'new',
+  };
+  const { error } = await client.from('leads').insert(leadPayload);
+  if (error) throw error;
+}
+
 loadPremiumUi();
 loadSupabasePublic();
 loadMetrika();
@@ -175,13 +208,13 @@ if (form) {
     button.textContent = 'Отправляем...';
     if (statusNode) statusNode.textContent = 'Отправляем заявку. Это займёт несколько секунд.';
     try {
-      const response = await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      if (!response.ok) throw new Error('Lead request failed');
+      await saveLeadToSupabase(payload);
       form.reset();
       reachGoal('lead_form_submit', payload);
       if (statusNode) statusNode.textContent = 'Спасибо, заявка отправлена. Мы свяжемся с вами и подскажем следующий шаг по проекту.';
       button.textContent = 'Заявка отправлена';
     } catch (error) {
+      console.warn('Lead submit failed:', error);
       reachGoal('lead_form_error', { page: window.location.href });
       if (statusNode) statusNode.textContent = 'Не удалось отправить заявку. Напишите нам в Telegram или WhatsApp, либо попробуйте ещё раз.';
       button.disabled = false;
