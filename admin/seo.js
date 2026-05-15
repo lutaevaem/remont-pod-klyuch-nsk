@@ -111,7 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
       updated_at: new Date().toISOString(),
     };
     setStatus('Сохраняем SEO...');
-    const request = id ? client.from('site_seo').update(payload).eq('id', id) : client.from('site_seo').insert(payload);
+    const request = id
+      ? client.from('site_seo').update(payload).eq('id', id)
+      : client.from('site_seo').upsert(payload, { onConflict: 'page_path' });
     const { error } = await request;
     if (error) return setStatus(`Ошибка сохранения SEO: ${error.message}`, 'error');
     resetForm();
