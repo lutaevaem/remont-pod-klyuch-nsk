@@ -19,6 +19,14 @@ function loadPremiumUi() {
   document.head.appendChild(link);
 }
 
+function getPageKind() {
+  const path = window.location.pathname;
+  const legalPaths = ['/privacy/', '/personal-data-consent/', '/marketing-consent/', '/terms/', '/requisites/'];
+  if (legalPaths.includes(path)) return 'legal';
+  if (path === '/contacts/' || path === '/contacts') return 'contacts';
+  return 'default';
+}
+
 function reachGoal(goalName, params = {}) {
   if (typeof window.sendMetricGoal === 'function') {
     window.sendMetricGoal(goalName, params);
@@ -37,22 +45,17 @@ function collectUtm() {
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll('.project-filters button[data-filter]');
   const projectItems = document.querySelectorAll('.project-item[data-category]');
-
   if (!filterButtons.length || !projectItems.length) return;
-
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const filter = button.dataset.filter;
-
       filterButtons.forEach((item) => item.classList.remove('active'));
       button.classList.add('active');
-
       projectItems.forEach((item) => {
         const categories = item.dataset.category.split(' ');
         const shouldShow = filter === 'all' || categories.includes(filter);
         item.hidden = !shouldShow;
       });
-
       reachGoal('project_filter_click', { filter });
     });
   });
@@ -61,7 +64,6 @@ function initProjectFilters() {
 function injectFooterStructure() {
   document.querySelectorAll('.footer-grid').forEach((footer) => {
     if (footer.querySelector('.footer-contact-links')) return;
-
     const currentTopLink = footer.querySelector(':scope > a');
     const contacts = document.createElement('div');
     contacts.className = 'footer-contact-links';
@@ -71,7 +73,6 @@ function injectFooterStructure() {
       <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
       <a href="mailto:i@usoltsev-top.ru">i@usoltsev-top.ru</a>
     `;
-
     const siteLinks = document.createElement('div');
     siteLinks.className = 'footer-site-links';
     siteLinks.innerHTML = `
@@ -81,7 +82,6 @@ function injectFooterStructure() {
       <a href="/services/komplektatsiya-obekta/">Комплектация</a>
       <a href="/contacts/">Контакты</a>
     `;
-
     if (currentTopLink) currentTopLink.replaceWith(contacts);
     else footer.appendChild(contacts);
     footer.appendChild(siteLinks);
@@ -105,24 +105,42 @@ function injectLegalFooterLinks() {
 }
 
 function injectFinalCta() {
+  const kind = getPageKind();
+  if (kind === 'legal') return;
+
   document.querySelectorAll('main').forEach((main) => {
     if (main.querySelector('.site-final-cta')) return;
     const finalCta = document.createElement('section');
-    finalCta.className = 'site-final-cta';
-    finalCta.innerHTML = `
-      <div class="container final-cta-inner">
-        <div>
-          <p class="final-cta-kicker">Следующий шаг</p>
-          <h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2>
-          <p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p>
+    finalCta.className = kind === 'contacts' ? 'site-final-cta contacts-final-cta' : 'site-final-cta';
+    finalCta.innerHTML = kind === 'contacts'
+      ? `
+        <div class="container final-cta-inner">
+          <div>
+            <p class="final-cta-kicker">Быстрый контакт</p>
+            <h2 class="final-cta-title">Можно начать с короткого сообщения</h2>
+            <p class="final-cta-text">Отправьте фото или видео объекта, площадь, район и желаемый результат. Этого достаточно, чтобы понять стартовую точку и предложить следующий шаг.</p>
+          </div>
+          <div class="final-cta-actions">
+            <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Написать в Telegram</a>
+            <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a href="tel:+79137998808">Позвонить</a>
+          </div>
         </div>
-        <div class="final-cta-actions">
-          <a href="/contacts/">Оставить заявку</a>
-          <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
-          <a href="tel:+79137998808">Позвонить</a>
+      `
+      : `
+        <div class="container final-cta-inner">
+          <div>
+            <p class="final-cta-kicker">Следующий шаг</p>
+            <h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2>
+            <p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p>
+          </div>
+          <div class="final-cta-actions">
+            <a href="/contacts/">Оставить заявку</a>
+            <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
+            <a href="tel:+79137998808">Позвонить</a>
+          </div>
         </div>
-      </div>
-    `;
+      `;
     main.appendChild(finalCta);
   });
 }
@@ -132,7 +150,6 @@ function injectFormConsents() {
     if (leadForm.querySelector('.legal-consents')) return;
     const submitButton = leadForm.querySelector('button[type="submit"]');
     if (!submitButton) return;
-
     const consents = document.createElement('div');
     consents.className = 'legal-consents';
     consents.innerHTML = `
@@ -152,7 +169,6 @@ function injectFormConsents() {
 
 function initCookieBanner() {
   if (localStorage.getItem('cookieConsentAccepted') === 'yes') return;
-
   const banner = document.createElement('div');
   banner.className = 'cookie-banner';
   banner.innerHTML = `
@@ -160,7 +176,6 @@ function initCookieBanner() {
     <button type="button">Хорошо</button>
   `;
   document.body.appendChild(banner);
-
   banner.querySelector('button').addEventListener('click', () => {
     localStorage.setItem('cookieConsentAccepted', 'yes');
     banner.remove();
@@ -186,20 +201,16 @@ if (form) {
     payload.marketing_consent = formData.get('marketing_consent') === 'yes';
     payload.utm = collectUtm();
     payload.page = window.location.href;
-
     button.disabled = true;
     button.textContent = 'Отправляем...';
     if (statusNode) statusNode.textContent = 'Отправляем заявку. Это займёт несколько секунд.';
-
     try {
       const response = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
       if (!response.ok) throw new Error('Lead request failed');
-
       form.reset();
       reachGoal('lead_form_submit', payload);
       if (statusNode) statusNode.textContent = 'Спасибо, заявка отправлена. Мы свяжемся с вами и подскажем следующий шаг по проекту.';
