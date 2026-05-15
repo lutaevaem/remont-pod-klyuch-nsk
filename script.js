@@ -1,6 +1,21 @@
 const form = document.querySelector('#lead-form');
 const statusNode = document.querySelector('#form-status');
 
+function loadMetrika() {
+  if (document.querySelector('script[data-metrika-local]')) return;
+  const script = document.createElement('script');
+  script.src = '/metrika.js';
+  script.async = true;
+  script.dataset.metrikaLocal = 'true';
+  document.head.appendChild(script);
+}
+
+function reachGoal(goalName, params = {}) {
+  if (typeof window.sendMetricGoal === 'function') {
+    window.sendMetricGoal(goalName, params);
+  }
+}
+
 function collectUtm() {
   const params = new URLSearchParams(window.location.search);
   const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
@@ -28,6 +43,8 @@ function initProjectFilters() {
         const shouldShow = filter === 'all' || categories.includes(filter);
         item.hidden = !shouldShow;
       });
+
+      reachGoal('project_filter_click', { filter });
     });
   });
 }
@@ -88,6 +105,7 @@ function initCookieBanner() {
   });
 }
 
+loadMetrika();
 initProjectFilters();
 injectLegalFooterLinks();
 injectFormConsents();
@@ -118,9 +136,11 @@ if (form) {
       if (!response.ok) throw new Error('Lead request failed');
 
       form.reset();
+      reachGoal('lead_form_submit', payload);
       if (statusNode) statusNode.textContent = 'Спасибо, заявка отправлена. Мы свяжемся с вами и подскажем следующий шаг по проекту.';
       button.textContent = 'Заявка отправлена';
     } catch (error) {
+      reachGoal('lead_form_error', { page: window.location.href });
       if (statusNode) statusNode.textContent = 'Не удалось отправить заявку. Напишите нам в Telegram или WhatsApp, либо попробуйте ещё раз.';
       button.disabled = false;
       button.textContent = 'Отправить заявку';
