@@ -60,6 +60,13 @@ function waitForSupabasePublic(retries = 80) {
   });
 }
 
+function withTimeout(promise, timeoutMs, message) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(message || 'Request timeout')), timeoutMs)),
+  ]);
+}
+
 function getPageKind() {
   const path = window.location.pathname;
   const legalPaths = ['/privacy/', '/personal-data-consent/', '/marketing-consent/', '/terms/', '/requisites/'];
@@ -163,11 +170,8 @@ function initCookieBanner() {
   });
 }
 
-async function saveLeadToSupabase(payload) {
-  const ready = await waitForSupabasePublic();
-  if (!ready) throw new Error('Supabase is not ready');
-  const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.publishableKey);
-  const leadPayload = {
+function normalizeLeadPayload(payload) {
+  return {
     name: payload.name || null,
     phone: payload.phone || null,
     email: payload.email || null,
@@ -180,8 +184,42 @@ async function saveLeadToSupabase(payload) {
     marketing_consent: Boolean(payload.marketing_consent),
     status: 'new',
   };
+}
+
+async function saveLeadWithSupabaseClient(leadPayload) {
+  const ready = await waitForSupabasePublic();
+  if (!ready) throw new Error('Supabase is not ready');
+  const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.publishableKey);
   const { error } = await client.from('leads').insert(leadPayload);
   if (error) throw error;
+}
+
+async function saveLeadWithRest(leadPayload) {
+  if (!window.SUPABASE_CONFIG?.url || !window.SUPABASE_CONFIG?.publishableKey) throw new Error('Supabase config is not ready');
+  const response = await fetch(`${window.SUPABASE_CONFIG.url}/rest/v1/leads`, {
+    method: 'POST',
+    headers: {
+      apikey: window.SUPABASE_CONFIG.publishableKey,
+      Authorization: `Bearer ${window.SUPABASE_CONFIG.publishableKey}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify(leadPayload),
+  });
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(text || `REST insert failed: ${response.status}`);
+  }
+}
+
+async function saveLeadToSupabase(payload) {
+  const leadPayload = normalizeLeadPayload(payload);
+  try {
+    await withTimeout(saveLeadWithSupabaseClient(leadPayload), 8000, 'Supabase client request timeout');
+  } catch (clientError) {
+    console.warn('Supabase client lead insert failed, trying REST fallback:', clientError);
+    await withTimeout(saveLeadWithRest(leadPayload), 8000, 'Supabase REST request timeout');
+  }
 }
 
 loadPremiumUi();
@@ -198,6 +236,7 @@ if (form) {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const button = form.querySelector('button[type="submit"]');
+    const initialButtonText = button.textContent || 'Отправить заявку';
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
     payload.personal_data_consent = formData.get('personal_data_consent') === 'on';
@@ -213,12 +252,16 @@ if (form) {
       reachGoal('lead_form_submit', payload);
       if (statusNode) statusNode.textContent = 'Спасибо, заявка отправлена. Мы свяжемся с вами и подскажем следующий шаг по проекту.';
       button.textContent = 'Заявка отправлена';
+      setTimeout(() => {
+        button.disabled = false;
+        button.textContent = initialButtonText;
+      }, 4000);
     } catch (error) {
       console.warn('Lead submit failed:', error);
-      reachGoal('lead_form_error', { page: window.location.href });
-      if (statusNode) statusNode.textContent = 'Не удалось отправить заявку. Напишите нам в Telegram или WhatsApp, либо попробуйте ещё раз.';
+      reachGoal('lead_form_error', { page: window.location.href, error: error.message });
+      if (statusNode) statusNode.textContent = `Не удалось отправить заявку: ${error.message}. Напишите нам в Telegram или WhatsApp, либо попробуйте ещё раз.`;
       button.disabled = false;
-      button.textContent = 'Отправить заявку';
+      button.textContent = initialButtonText;
     }
   });
 }
