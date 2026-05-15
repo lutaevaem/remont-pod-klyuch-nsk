@@ -140,6 +140,15 @@ async function initSiteContent() {
     node.textContent = value;
   }
 
+  function cleanPhone(value) {
+    return String(value || '').replace(/[^+\d]/g, '');
+  }
+
+  function applyHref(selector, value) {
+    if (!value) return;
+    document.querySelectorAll(selector).forEach((node) => { node.href = value; });
+  }
+
   function applyText(contentMap) {
     document.querySelectorAll('[data-content-key]').forEach((node) => applyNodeText(node, contentMap[node.dataset.contentKey]));
 
@@ -153,6 +162,21 @@ async function initSiteContent() {
     if (contentMap['global.brand.name']) document.querySelectorAll('.brand b').forEach((node) => applyNodeText(node, contentMap['global.brand.name']));
     if (contentMap['global.brand.subtitle']) document.querySelectorAll('.brand small').forEach((node) => applyNodeText(node, contentMap['global.brand.subtitle']));
     if (contentMap['global.phone']) document.querySelectorAll('.header-phone, .footer-contact-links a[href^="tel:"]').forEach((node) => applyNodeText(node, contentMap['global.phone']));
+  }
+
+  function applySettings(settingsMap) {
+    if (settingsMap.brand_name) document.querySelectorAll('.brand b').forEach((node) => applyNodeText(node, settingsMap.brand_name));
+    if (settingsMap.brand_subtitle) document.querySelectorAll('.brand small').forEach((node) => applyNodeText(node, settingsMap.brand_subtitle));
+    if (settingsMap.phone_display) {
+      document.querySelectorAll('.header-phone, .footer-contact-links a[href^="tel:"]').forEach((node) => applyNodeText(node, settingsMap.phone_display));
+      applyHref('.header-phone, a[href^="tel:"]', `tel:${cleanPhone(settingsMap.phone_display)}`);
+    }
+    if (settingsMap.telegram_url) applyHref('a[href*="t.me"], a[href*="Telegram"]', settingsMap.telegram_url);
+    if (settingsMap.whatsapp_url) applyHref('a[href*="wa.me"], a[href*="WhatsApp"]', settingsMap.whatsapp_url);
+    if (settingsMap.email) {
+      applyHref('a[href^="mailto:"]', `mailto:${settingsMap.email}`);
+      document.querySelectorAll('.footer-contact-links a[href^="mailto:"]').forEach((node) => applyNodeText(node, settingsMap.email));
+    }
   }
 
   function setBackground(node, imageUrl) {
@@ -181,9 +205,10 @@ async function initSiteContent() {
   }
 
   try {
-    const [{ data: contentData, error: contentError }, { data: imageData, error: imageError }] = await Promise.all([
+    const [{ data: contentData, error: contentError }, { data: imageData, error: imageError }, { data: settingsData }] = await Promise.all([
       client.from('site_content').select('content_key,value').eq('is_active', true),
       client.from('site_images').select('image_key,image_url,label').eq('is_active', true),
+      client.from('site_settings').select('setting_key,value').eq('is_active', true),
     ]);
 
     if (contentError) throw contentError;
@@ -191,8 +216,10 @@ async function initSiteContent() {
 
     const contentMap = Object.fromEntries((contentData || []).map((item) => [item.content_key, item.value]));
     const imageMap = Object.fromEntries((imageData || []).map((item) => [item.image_key, item]));
+    const settingsMap = Object.fromEntries((settingsData || []).map((item) => [item.setting_key, item.value]));
 
     applyText(contentMap);
+    applySettings(settingsMap);
     applyImages(imageMap);
   } catch (error) {
     console.warn('Site content loading failed:', error);
