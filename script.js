@@ -58,6 +58,36 @@ function initProjectFilters() {
   });
 }
 
+function injectFooterStructure() {
+  document.querySelectorAll('.footer-grid').forEach((footer) => {
+    if (footer.querySelector('.footer-contact-links')) return;
+
+    const currentTopLink = footer.querySelector(':scope > a');
+    const contacts = document.createElement('div');
+    contacts.className = 'footer-contact-links';
+    contacts.innerHTML = `
+      <a href="tel:+79137998808">+7 (913) 799-88-08</a>
+      <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
+      <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
+      <a href="mailto:i@usoltsev-top.ru">i@usoltsev-top.ru</a>
+    `;
+
+    const siteLinks = document.createElement('div');
+    siteLinks.className = 'footer-site-links';
+    siteLinks.innerHTML = `
+      <a href="/projects/">Проекты</a>
+      <a href="/services/remont-pod-klyuch/">Ремонт под ключ</a>
+      <a href="/services/stroitelstvo-pod-klyuch/">Строительство</a>
+      <a href="/services/komplektatsiya-obekta/">Комплектация</a>
+      <a href="/contacts/">Контакты</a>
+    `;
+
+    if (currentTopLink) currentTopLink.replaceWith(contacts);
+    else footer.appendChild(contacts);
+    footer.appendChild(siteLinks);
+  });
+}
+
 function injectLegalFooterLinks() {
   document.querySelectorAll('.footer-grid').forEach((footer) => {
     if (footer.querySelector('.legal-footer-links')) return;
@@ -71,6 +101,29 @@ function injectLegalFooterLinks() {
       <a href="/requisites/">Реквизиты</a>
     `;
     footer.appendChild(links);
+  });
+}
+
+function injectFinalCta() {
+  document.querySelectorAll('main').forEach((main) => {
+    if (main.querySelector('.site-final-cta')) return;
+    const finalCta = document.createElement('section');
+    finalCta.className = 'site-final-cta';
+    finalCta.innerHTML = `
+      <div class="container final-cta-inner">
+        <div>
+          <p class="final-cta-kicker">Следующий шаг</p>
+          <h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2>
+          <p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p>
+        </div>
+        <div class="final-cta-actions">
+          <a href="/contacts/">Оставить заявку</a>
+          <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
+          <a href="tel:+79137998808">Позвонить</a>
+        </div>
+      </div>
+    `;
+    main.appendChild(finalCta);
   });
 }
 
@@ -117,7 +170,9 @@ function initCookieBanner() {
 loadPremiumUi();
 loadMetrika();
 initProjectFilters();
+injectFooterStructure();
 injectLegalFooterLinks();
+injectFinalCta();
 injectFormConsents();
 initCookieBanner();
 
