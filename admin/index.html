@@ -73,8 +73,24 @@
               <label class="checkbox-label"><input name="is_published" type="checkbox" checked> <span>Публиковать на сайте</span></label>
             </div>
 
-            <label>Фото проекта<input name="images" type="file" accept="image/*" multiple></label>
-            <p class="form-hint">Фото загрузятся в Supabase Storage после сохранения проекта. Можно добавлять “до”, “процесс”, “после” — порядок можно будет уточнить позже.</p>
+            <div class="photo-manager">
+              <div class="photo-manager-head">
+                <div>
+                  <p class="eyebrow">Фото проекта</p>
+                  <h3>Разложите фото по смыслу</h3>
+                </div>
+                <p>Так сайт поймёт, что показывать как обложку, “до”, “процесс” и “после”.</p>
+              </div>
+              <div class="photo-grid-inputs">
+                <label>Обложка проекта<input name="photo_cover" type="file" accept="image/*"></label>
+                <label>До<input name="photo_before" type="file" accept="image/*"></label>
+                <label>Концепция / дизайн<input name="photo_concept" type="file" accept="image/*"></label>
+                <label>Процесс<input name="photo_process" type="file" accept="image/*"></label>
+                <label>После<input name="photo_after" type="file" accept="image/*"></label>
+                <label>Дополнительные фото<input name="photo_extra" type="file" accept="image/*" multiple></label>
+              </div>
+              <div class="existing-images" id="existing-images"></div>
+            </div>
 
             <button class="primary" type="submit">Сохранить проект</button>
           </form>
