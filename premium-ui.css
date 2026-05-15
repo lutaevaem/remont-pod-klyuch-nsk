@@ -1,35 +1,60 @@
-/* Premium bottom area and legal UX */
+/* Premium bottom area, form UX and footer system */
+.lead-form{
+  position:relative;
+  overflow:hidden;
+}
+
+.lead-form::before{
+  content:'Предварительный разбор';
+  display:inline-flex;
+  width:max-content;
+  padding:7px 11px;
+  border-radius:999px;
+  background:#15130f;
+  color:#e0bb72;
+  font-size:11px;
+  line-height:1;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.lead-form label{
+  color:#28231d;
+}
+
 .lead-form .legal-consents{
   display:grid;
-  gap:12px;
-  margin:2px 0 4px;
-  padding:18px 18px 16px;
+  gap:10px;
+  margin:2px 0 2px;
+  padding:15px 16px 14px;
   border:1px solid #eadcc7;
-  border-radius:22px;
+  border-radius:20px;
   background:linear-gradient(135deg,#fffaf2,#f7efe4);
 }
 
 .lead-form .consent-line{
   display:grid!important;
-  grid-template-columns:22px 1fr;
-  gap:12px;
+  grid-template-columns:20px 1fr;
+  gap:11px;
   align-items:flex-start;
-  color:#5c5248!important;
-  font-weight:600!important;
-  font-size:13px!important;
-  line-height:1.55!important;
+  color:#675d52!important;
+  font-weight:500!important;
+  font-size:12px!important;
+  line-height:1.5!important;
 }
 
 .lead-form .consent-line input{
   appearance:none;
-  width:18px!important;
-  height:18px!important;
+  width:17px!important;
+  height:17px!important;
   margin:2px 0 0!important;
   border:1px solid #c9aa72!important;
   border-radius:6px!important;
   background:#fff!important;
   cursor:pointer;
   position:relative;
+  flex:none;
 }
 
 .lead-form .consent-line input:checked{
@@ -44,7 +69,7 @@
   display:grid;
   place-items:center;
   color:#17120a;
-  font-size:13px;
+  font-size:12px;
   font-weight:900;
 }
 
@@ -55,11 +80,101 @@
   text-underline-offset:3px;
 }
 
-.lead-form .legal-note,
+.lead-form .legal-note{
+  margin:2px 0 0!important;
+  color:#958a7c!important;
+  font-size:12px!important;
+  line-height:1.45;
+}
+
 .lead-form .form-note{
   color:#8a7f73!important;
   font-size:13px!important;
   line-height:1.55;
+  max-width:430px;
+}
+
+.site-final-cta{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#15130f 0%,#241d14 54%,#0d0c0a 100%);
+  color:#f7f3ea;
+  border-top:1px solid rgba(202,161,90,.18);
+  border-bottom:1px solid rgba(202,161,90,.18);
+}
+
+.site-final-cta::before{
+  content:'';
+  position:absolute;
+  inset:auto -12% -60% auto;
+  width:520px;
+  height:520px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(202,161,90,.28),transparent 65%);
+  pointer-events:none;
+}
+
+.final-cta-inner{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:34px;
+  align-items:end;
+  padding:68px 0;
+}
+
+.final-cta-kicker{
+  margin:0 0 13px;
+  color:#e0bb72;
+  font-weight:800;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.final-cta-title{
+  margin:0;
+  max-width:830px;
+  font-size:clamp(34px,4vw,58px);
+  line-height:1.04;
+  letter-spacing:-.045em;
+}
+
+.final-cta-text{
+  margin:18px 0 0;
+  max-width:720px;
+  color:#cfc5b7;
+  font-size:18px;
+  line-height:1.6;
+}
+
+.final-cta-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  min-width:380px;
+}
+
+.final-cta-actions a{
+  min-height:54px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 22px;
+  border-radius:999px;
+  font-weight:800;
+  border:1px solid rgba(202,161,90,.32);
+  color:#e0bb72;
+  background:rgba(255,255,255,.035);
+}
+
+.final-cta-actions a:first-child{
+  background:linear-gradient(135deg,#e0bb72,#caa15a);
+  color:#17120a;
+  border-color:transparent;
+  box-shadow:0 14px 42px rgba(202,161,90,.22);
 }
 
 .footer{
@@ -79,10 +194,10 @@
 
 .footer-grid{
   display:grid!important;
-  grid-template-columns:minmax(240px,.9fr) minmax(170px,.5fr) minmax(420px,1.15fr);
-  gap:34px!important;
+  grid-template-columns:minmax(260px,.85fr) minmax(220px,.65fr) minmax(230px,.65fr) minmax(360px,1fr);
+  gap:30px!important;
   align-items:start!important;
-  padding:42px 0 36px;
+  padding:46px 0 38px;
 }
 
 .footer-grid > span{
@@ -96,8 +211,8 @@
 }
 
 .footer-grid > span::after{
-  content:'Строительство, ремонт и комплектация под ключ в Новосибирске';
-  max-width:300px;
+  content:'Строительство, ремонт и комплектация под ключ в Новосибирске и Новосибирском районе.';
+  max-width:310px;
   color:#a79b8d;
   font-size:13px;
   font-weight:500;
@@ -122,18 +237,18 @@
   background:rgba(202,161,90,.1);
 }
 
+.footer-contact-links,
+.footer-site-links,
 .legal-footer-links{
   display:grid!important;
-  grid-template-columns:1fr 1fr;
-  gap:10px 18px!important;
-  max-width:none!important;
+  gap:10px!important;
   font-size:13px!important;
   line-height:1.35;
 }
 
+.footer-contact-links::before,
+.footer-site-links::before,
 .legal-footer-links::before{
-  content:'Документы и реквизиты';
-  grid-column:1/-1;
   margin-bottom:4px;
   color:#e0bb72;
   font-weight:800;
@@ -142,16 +257,28 @@
   font-size:12px;
 }
 
+.footer-contact-links::before{content:'Связь'}
+.footer-site-links::before{content:'Разделы сайта'}
+.legal-footer-links::before{content:'Документы'}
+
+.footer-contact-links a,
+.footer-site-links a,
 .legal-footer-links a{
   color:#b9b0a2!important;
   text-decoration:none!important;
-  border-bottom:1px solid rgba(202,161,90,.22);
-  padding-bottom:7px;
+  border-bottom:1px solid rgba(202,161,90,.18);
+  padding-bottom:8px;
 }
 
+.footer-contact-links a:hover,
+.footer-site-links a:hover,
 .legal-footer-links a:hover{
   color:#f6efe4!important;
   border-bottom-color:#caa15a;
+}
+
+.legal-footer-links{
+  max-width:none!important;
 }
 
 .cookie-banner{
@@ -160,12 +287,17 @@
   border:1px solid rgba(202,161,90,.34)!important;
 }
 
-@media(max-width:980px){
+@media(max-width:1100px){
   .footer-grid{
     grid-template-columns:1fr 1fr!important;
   }
-  .legal-footer-links{
-    grid-column:1/-1;
+  .final-cta-inner{
+    grid-template-columns:1fr;
+    align-items:start;
+  }
+  .final-cta-actions{
+    justify-content:flex-start;
+    min-width:0;
   }
 }
 
@@ -177,14 +309,19 @@
   .lead-form .consent-line{
     font-size:12px!important;
   }
+  .final-cta-inner{
+    padding:48px 0 46px;
+  }
+  .final-cta-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
   .footer-grid{
     grid-template-columns:1fr!important;
     padding:34px 0 110px;
   }
-  .legal-footer-links{
-    grid-template-columns:1fr!important;
-  }
-  .footer-grid > a{
+  .footer-grid > a,
+  .final-cta-actions a{
     width:100%;
   }
 }
