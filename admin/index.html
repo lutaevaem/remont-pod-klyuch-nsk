@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Админка сайта | Александр Усольцев</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/">
+        <span>АУ</span>
+        <div><b>Александр Усольцев</b><small>админка сайта</small></div>
+      </a>
+      <nav class="admin-nav">
+        <button class="active" data-view="projects">Проекты</button>
+        <button data-view="content">Тексты сайта</button>
+        <button data-view="settings">Настройки</button>
+      </nav>
+      <div class="admin-sidebar-note">
+        <b>Supabase подключён</b>
+        <p>Проекты и фото будут храниться в базе и Storage. Для публикации нужны таблицы и политики доступа.</p>
+      </div>
+    </aside>
+
+    <section class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <p class="eyebrow">Управление сайтом</p>
+          <h1>Проекты, фото и тексты</h1>
+        </div>
+        <div class="admin-actions">
+          <button id="refresh-projects" type="button">Обновить</button>
+          <a href="/projects/" target="_blank">Открыть сайт</a>
+        </div>
+      </header>
+
+      <section class="admin-status" id="admin-status">Готовим подключение к Supabase...</section>
+
+      <section class="admin-view active" id="view-projects">
+        <div class="admin-grid">
+          <form class="admin-card admin-form" id="project-form">
+            <input type="hidden" name="id">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">Проекты</p>
+                <h2 id="project-form-title">Добавить проект</h2>
+              </div>
+              <button type="button" id="reset-project-form">Очистить</button>
+            </div>
+
+            <label>Название проекта<input name="title" required placeholder="Например: Квартира 82 м² в Заельцовском районе"></label>
+            <div class="two-cols">
+              <label>Тип проекта<select name="category" required><option value="apartment">Квартира</option><option value="house">Дом</option><option value="building">Строительство</option><option value="commercial">Коммерция</option><option value="furnishing">Комплектация</option></select></label>
+              <label>Площадь<input name="area" placeholder="82 м²"></label>
+            </div>
+            <div class="two-cols">
+              <label>Район / город<input name="location" placeholder="Новосибирск, Заельцовский район"></label>
+              <label>Сроки<input name="timeline" placeholder="Например: 4 месяца"></label>
+            </div>
+            <label>Стартовая точка<textarea name="start_point" placeholder="Черновая отделка, коробка дома, начатый ремонт..."></textarea></label>
+            <label>Задача клиента<textarea name="client_task" placeholder="Что нужно было получить на выходе"></textarea></label>
+            <label>Что сделали<textarea name="scope" placeholder="Ремонт, материалы, мебель, техника, свет, клининг..."></textarea></label>
+            <label>Результат<textarea name="result" placeholder="Какой финал получил клиент"></textarea></label>
+            <label>Отзыв клиента<textarea name="review" placeholder="Можно добавить позже"></textarea></label>
+
+            <div class="two-cols">
+              <label>Порядок показа<input name="sort_order" type="number" value="100"></label>
+              <label class="checkbox-label"><input name="is_published" type="checkbox" checked> <span>Публиковать на сайте</span></label>
+            </div>
+
+            <label>Фото проекта<input name="images" type="file" accept="image/*" multiple></label>
+            <p class="form-hint">Фото загрузятся в Supabase Storage после сохранения проекта. Можно добавлять “до”, “процесс”, “после” — порядок можно будет уточнить позже.</p>
+
+            <button class="primary" type="submit">Сохранить проект</button>
+          </form>
+
+          <div class="admin-card">
+            <div class="card-head">
+              <div><p class="eyebrow">Список</p><h2>Проекты на сайте</h2></div>
+            </div>
+            <div class="project-list" id="project-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-view" id="view-content">
+        <div class="admin-card narrow-card">
+          <p class="eyebrow">Следующий этап</p>
+          <h2>Редактирование текстов сайта</h2>
+          <p>Этот раздел подготовлен под следующий шаг. Сначала запускаем проекты и фото, затем подключаем безопасные поля для текстов: главная, услуги, контакты, CTA и SEO.</p>
+          <ul>
+            <li>Главная: H1, подзаголовок, преимущества, блок Александра.</li>
+            <li>Услуги: заголовки, описания, преимущества, CTA.</li>
+            <li>Контакты: тексты, подсказки, контактные данные.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="admin-view" id="view-settings">
+        <div class="admin-card narrow-card">
+          <p class="eyebrow">Настройки</p>
+          <h2>Подключение Supabase</h2>
+          <p><b>Project URL:</b> <code id="settings-url"></code></p>
+          <p><b>Storage bucket:</b> <code>project-images</code></p>
+          <p>Service role key не хранится в коде сайта. Для защищённых серверных операций его нужно добавлять только в Vercel Environment Variables.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/supabase-config.js"></script>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>
