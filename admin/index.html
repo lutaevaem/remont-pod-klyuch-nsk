@@ -10,11 +10,22 @@
   <link rel="stylesheet" href="/admin/admin.css">
 </head>
 <body>
-  <main class="admin-shell">
+  <section class="admin-login" id="admin-login" hidden>
+    <form class="admin-login-card" id="admin-login-form">
+      <a class="admin-brand" href="/"><span>АУ</span><div><b>Александр Усольцев</b><small>админка сайта</small></div></a>
+      <div><p class="eyebrow">Закрытый доступ</p><h1>Вход в админку</h1><p>Войдите через email и пароль администратора, чтобы управлять проектами, текстами и изображениями сайта.</p></div>
+      <label>Email<input name="email" type="email" autocomplete="email" required placeholder="i@usoltsev-top.ru"></label>
+      <label>Пароль<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="primary" type="submit">Войти</button>
+      <p class="login-status" id="login-status">Доступ только для администратора сайта.</p>
+    </form>
+  </section>
+
+  <main class="admin-shell" id="admin-app" hidden>
     <aside class="admin-sidebar">
       <a class="admin-brand" href="/"><span>АУ</span><div><b>Александр Усольцев</b><small>админка сайта</small></div></a>
       <nav class="admin-nav"><button class="active" data-view="projects">Проекты</button><button data-view="content">Тексты сайта</button><button data-view="images">Изображения сайта</button><button data-view="settings">Настройки</button></nav>
-      <div class="admin-sidebar-note"><b>Supabase подключён</b><p>Проекты, фото, тексты и изображения сайта хранятся в базе и управляются через админку.</p></div>
+      <div class="admin-sidebar-note"><b>Доступ открыт</b><p id="admin-user-note">Вы вошли как администратор сайта.</p><button class="logout-button" type="button" id="logout-button">Выйти</button></div>
     </aside>
     <section class="admin-main">
       <header class="admin-topbar"><div><p class="eyebrow">Управление сайтом</p><h1>Проекты, фото и тексты</h1></div><div class="admin-actions"><button id="refresh-projects" type="button">Обновить</button><a href="/projects/" target="_blank">Открыть сайт</a></div></header>
@@ -34,6 +45,6 @@
       <section class="admin-view" id="view-settings"><div class="admin-card narrow-card"><p class="eyebrow">Настройки</p><h2>Подключение Supabase</h2><p><b>Project URL:</b> <code id="settings-url"></code></p><p><b>Storage buckets:</b> <code>project-images</code>, <code>site-images</code></p><p>Service role key не хранится в коде сайта. Для защищённых серверных операций его нужно добавлять только в Vercel Environment Variables.</p></div></section>
     </section>
   </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/admin/supabase-config.js"></script><script src="/admin/admin.js"></script><script src="/admin/content.js"></script><script src="/admin/site-images.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/admin/supabase-config.js"></script><script src="/admin/auth.js"></script><script src="/admin/admin.js"></script><script src="/admin/content.js"></script><script src="/admin/site-images.js"></script>
 </body>
 </html>
