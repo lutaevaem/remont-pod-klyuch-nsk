@@ -1,8 +1,12 @@
 const form = document.querySelector('#lead-form');
 const statusNode = document.querySelector('#form-status');
 
+function hasScriptBySrc(part) {
+  return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
+}
+
 function loadMetrika() {
-  if (document.querySelector('script[data-metrika-local]')) return;
+  if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
   script.src = '/metrika.js';
   script.async = true;
@@ -11,7 +15,7 @@ function loadMetrika() {
 }
 
 function loadPremiumUi() {
-  if (document.querySelector('link[data-premium-ui]')) return;
+  if (document.querySelector('link[data-premium-ui]') || document.querySelector('link[href$="/premium-ui.css"]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = '/premium-ui.css';
@@ -20,26 +24,26 @@ function loadPremiumUi() {
 }
 
 function loadSupabasePublic() {
-  if (!document.querySelector('script[data-supabase-cdn]')) {
+  if (!document.querySelector('script[data-supabase-cdn]') && !hasScriptBySrc('@supabase/supabase-js')) {
     const supabaseScript = document.createElement('script');
     supabaseScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
     supabaseScript.dataset.supabaseCdn = 'true';
     document.head.appendChild(supabaseScript);
   }
-  if (!document.querySelector('script[data-supabase-config]')) {
+  if (!document.querySelector('script[data-supabase-config]') && !hasScriptBySrc('supabase-config.js')) {
     const configScript = document.createElement('script');
     configScript.src = '/supabase-config.js';
     configScript.dataset.supabaseConfig = 'true';
     document.head.appendChild(configScript);
   }
-  if (!document.querySelector('script[data-site-content]')) {
+  if (!document.querySelector('script[data-site-content]') && !hasScriptBySrc('/site-content.js')) {
     const contentScript = document.createElement('script');
     contentScript.src = '/site-content.js';
     contentScript.defer = true;
     contentScript.dataset.siteContent = 'true';
     document.head.appendChild(contentScript);
   }
-  if (!document.querySelector('script[data-site-seo]')) {
+  if (!document.querySelector('script[data-site-seo]') && !hasScriptBySrc('/site-seo.js')) {
     const seoScript = document.createElement('script');
     seoScript.src = '/site-seo.js';
     seoScript.defer = true;
@@ -90,11 +94,11 @@ function collectUtm() {
 
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll('.project-filters button[data-filter]');
-  const projectItems = document.querySelectorAll('.project-item[data-category]');
-  if (!filterButtons.length || !projectItems.length) return;
+  if (!filterButtons.length) return;
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const filter = button.dataset.filter;
+      const projectItems = document.querySelectorAll('.project-item[data-category]');
       filterButtons.forEach((item) => item.classList.remove('active'));
       button.classList.add('active');
       projectItems.forEach((item) => {
