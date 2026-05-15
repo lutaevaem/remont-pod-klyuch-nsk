@@ -6,8 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshButton = document.querySelector('#refresh-projects');
   const formTitle = document.querySelector('#project-form-title');
   const settingsUrl = document.querySelector('#settings-url');
+  const existingImagesNode = document.querySelector('#existing-images');
   let projectsCache = [];
   let supabaseClient = null;
+  let currentProject = null;
+
+  const photoFields = [
+    ['cover', 'Обложка'],
+    ['before', 'До'],
+    ['concept', 'Концепция'],
+    ['process', 'Процесс'],
+    ['after', 'После'],
+  ];
 
   function setStatus(message, type = '') {
     if (!statusNode) return;
@@ -44,6 +54,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return String(value || '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
   }
 
+  function normalizeImages(images) {
+    if (!images) return { cover: null, before: null, concept: null, process: null, after: null, extra: [] };
+    if (Array.isArray(images)) {
+      return { cover: images[0] || null, before: images[0] || null, concept: images[1] || null, process: images[2] || null, after: images[3] || null, extra: images.slice(4) };
+    }
+    return {
+      cover: images.cover || null,
+      before: images.before || null,
+      concept: images.concept || null,
+      process: images.process || null,
+      after: images.after || null,
+      extra: Array.isArray(images.extra) ? images.extra : [],
+    };
+  }
+
   function initSupabase() {
     const config = window.SUPABASE_CONFIG;
 
@@ -62,25 +87,58 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-  async function uploadImages(projectId, files) {
-    const urls = [];
+  async function uploadOne(projectId, file, type) {
     const bucket = window.SUPABASE_CONFIG.bucket || 'project-images';
+    const extension = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
+    const safeName = `${type}-${Date.now()}-${Math.random().toString(16).slice(2)}.${extension}`;
+    const path = `${projectId}/${safeName}`;
+    const { error } = await supabaseClient.storage.from(bucket).upload(path, file, { upsert: true });
+    if (error) throw error;
+    const { data } = supabaseClient.storage.from(bucket).getPublicUrl(path);
+    return data.publicUrl;
+  }
 
-    for (const file of files) {
-      const extension = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
-      const safeName = `${Date.now()}-${Math.random().toString(16).slice(2)}.${extension}`;
-      const path = `${projectId}/${safeName}`;
-      const { error } = await supabaseClient.storage.from(bucket).upload(path, file, { upsert: true });
-      if (error) throw error;
-      const { data } = supabaseClient.storage.from(bucket).getPublicUrl(path);
-      urls.push(data.publicUrl);
+  async function uploadStructuredImages(projectId, currentImages) {
+    const images = normalizeImages(currentImages);
+
+    for (const [key] of photoFields) {
+      const file = projectForm.elements[`photo_${key}`]?.files?.[0];
+      if (file) images[key] = await uploadOne(projectId, file, key);
     }
 
-    return urls;
+    const extraFiles = Array.from(projectForm.elements.photo_extra?.files || []);
+    if (extraFiles.length) {
+      for (const file of extraFiles) {
+        images.extra.push(await uploadOne(projectId, file, 'extra'));
+      }
+    }
+
+    return images;
+  }
+
+  function renderExistingImages(project) {
+    if (!existingImagesNode) return;
+    const images = normalizeImages(project?.images);
+    const cards = [];
+
+    photoFields.forEach(([key, label]) => {
+      if (images[key]) {
+        cards.push(`<div class="existing-image-card"><img src="${escapeHtml(images[key])}" alt="${escapeHtml(label)}"><span>${escapeHtml(label)}</span><button type="button" data-remove-photo="${key}">Удалить</button></div>`);
+      }
+    });
+
+    images.extra.forEach((url, index) => {
+      cards.push(`<div class="existing-image-card"><img src="${escapeHtml(url)}" alt="Дополнительное фото"><span>Доп. фото ${index + 1}</span><button type="button" data-remove-photo="extra:${index}">Удалить</button></div>`);
+    });
+
+    existingImagesNode.innerHTML = cards.length
+      ? `<p class="existing-images-title">Загруженные фото</p><div class="existing-image-grid">${cards.join('')}</div>`
+      : '';
   }
 
   function fillForm(project) {
     if (!projectForm || !formTitle) return;
+    currentProject = project;
     formTitle.textContent = 'Редактировать проект';
     Object.entries(project).forEach(([key, value]) => {
       const field = projectForm.elements[key];
@@ -88,16 +146,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (field.type === 'checkbox') field.checked = Boolean(value);
       else if (key !== 'images') field.value = value ?? '';
     });
+    renderExistingImages(project);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function resetForm() {
     if (!projectForm || !formTitle) return;
+    currentProject = null;
     formTitle.textContent = 'Добавить проект';
     projectForm.reset();
     if (projectForm.elements.id) projectForm.elements.id.value = '';
     if (projectForm.elements.sort_order) projectForm.elements.sort_order.value = 100;
     if (projectForm.elements.is_published) projectForm.elements.is_published.checked = true;
+    renderExistingImages(null);
   }
 
   function renderProjects() {
@@ -154,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(projectForm);
     const id = formData.get('id');
-    const files = Array.from(projectForm.elements.images?.files || []);
 
     const payload = {
       title: formData.get('title'),
@@ -186,15 +246,12 @@ document.addEventListener('DOMContentLoaded', () => {
       saved = data;
     }
 
-    if (files.length) {
-      try {
-        const newUrls = await uploadImages(saved.id, files);
-        const currentImages = Array.isArray(saved.images) ? saved.images : [];
-        const { error } = await supabaseClient.from('projects').update({ images: [...currentImages, ...newUrls], updated_at: new Date().toISOString() }).eq('id', saved.id);
-        if (error) throw error;
-      } catch (error) {
-        return setStatus(`Проект сохранён, но фото не загрузились: ${error.message}`, 'error');
-      }
+    try {
+      const nextImages = await uploadStructuredImages(saved.id, saved.images);
+      const { error } = await supabaseClient.from('projects').update({ images: nextImages, updated_at: new Date().toISOString() }).eq('id', saved.id);
+      if (error) throw error;
+    } catch (error) {
+      return setStatus(`Проект сохранён, но фото не загрузились: ${error.message}`, 'error');
     }
 
     resetForm();
@@ -202,7 +259,30 @@ document.addEventListener('DOMContentLoaded', () => {
     setStatus('Проект сохранён.', 'success');
   }
 
+  async function removePhoto(removeKey) {
+    if (!currentProject) return;
+    const images = normalizeImages(currentProject.images);
+    if (removeKey.startsWith('extra:')) {
+      const index = Number(removeKey.split(':')[1]);
+      images.extra.splice(index, 1);
+    } else {
+      images[removeKey] = null;
+    }
+    const { error } = await supabaseClient.from('projects').update({ images, updated_at: new Date().toISOString() }).eq('id', currentProject.id);
+    if (error) return setStatus(`Не удалось удалить фото: ${error.message}`, 'error');
+    currentProject.images = images;
+    renderExistingImages(currentProject);
+    await fetchProjects();
+    setStatus('Фото удалено из проекта.', 'success');
+  }
+
   async function handleProjectAction(event) {
+    const removeButton = event.target.closest('button[data-remove-photo]');
+    if (removeButton) {
+      await removePhoto(removeButton.dataset.removePhoto);
+      return;
+    }
+
     const button = event.target.closest('button[data-action]');
     if (!button || !supabaseClient) return;
     const project = projectsCache.find((item) => String(item.id) === String(button.dataset.id));
@@ -231,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (projectForm) projectForm.addEventListener('submit', saveProject);
   if (projectList) projectList.addEventListener('click', handleProjectAction);
+  if (existingImagesNode) existingImagesNode.addEventListener('click', handleProjectAction);
   if (resetButton) resetButton.addEventListener('click', resetForm);
   if (refreshButton) refreshButton.addEventListener('click', fetchProjects);
 
