@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let projectsCache = [];
   let supabaseClient = null;
   let currentProject = null;
+  let hasLoadedProjects = false;
 
   const photoFields = [
     ['cover', 'Обложка'],
@@ -83,7 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (settingsUrl) settingsUrl.textContent = config.url;
-    supabaseClient = window.supabase.createClient(config.url, config.publishableKey);
+    if (!window.adminSupabaseClient) {
+      window.adminSupabaseClient = window.supabase.createClient(config.url, config.publishableKey);
+    }
+    supabaseClient = window.adminSupabaseClient;
     return true;
   }
 
@@ -108,9 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const extraFiles = Array.from(projectForm.elements.photo_extra?.files || []);
     if (extraFiles.length) {
-      for (const file of extraFiles) {
-        images.extra.push(await uploadOne(projectId, file, 'extra'));
-      }
+      for (const file of extraFiles) images.extra.push(await uploadOne(projectId, file, 'extra'));
     }
 
     return images;
@@ -122,9 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = [];
 
     photoFields.forEach(([key, label]) => {
-      if (images[key]) {
-        cards.push(`<div class="existing-image-card"><img src="${escapeHtml(images[key])}" alt="${escapeHtml(label)}"><span>${escapeHtml(label)}</span><button type="button" data-remove-photo="${key}">Удалить</button></div>`);
-      }
+      if (images[key]) cards.push(`<div class="existing-image-card"><img src="${escapeHtml(images[key])}" alt="${escapeHtml(label)}"><span>${escapeHtml(label)}</span><button type="button" data-remove-photo="${key}">Удалить</button></div>`);
     });
 
     images.extra.forEach((url, index) => {
@@ -206,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     projectsCache = data || [];
     renderProjects();
+    hasLoadedProjects = true;
     setStatus(`Подключение работает. Проектов в базе: ${projectsCache.length}.`, 'success');
   }
 
@@ -262,12 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
   async function removePhoto(removeKey) {
     if (!currentProject) return;
     const images = normalizeImages(currentProject.images);
-    if (removeKey.startsWith('extra:')) {
-      const index = Number(removeKey.split(':')[1]);
-      images.extra.splice(index, 1);
-    } else {
-      images[removeKey] = null;
-    }
+    if (removeKey.startsWith('extra:')) images.extra.splice(Number(removeKey.split(':')[1]), 1);
+    else images[removeKey] = null;
+
     const { error } = await supabaseClient.from('projects').update({ images, updated_at: new Date().toISOString() }).eq('id', currentProject.id);
     if (error) return setStatus(`Не удалось удалить фото: ${error.message}`, 'error');
     currentProject.images = images;
@@ -288,10 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const project = projectsCache.find((item) => String(item.id) === String(button.dataset.id));
     if (!project) return;
 
-    if (button.dataset.action === 'edit') {
-      fillForm(project);
-      return;
-    }
+    if (button.dataset.action === 'edit') return fillForm(project);
 
     if (button.dataset.action === 'toggle') {
       const { error } = await supabaseClient.from('projects').update({ is_published: !project.is_published, updated_at: new Date().toISOString() }).eq('id', project.id);
@@ -315,6 +310,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (resetButton) resetButton.addEventListener('click', resetForm);
   if (refreshButton) refreshButton.addEventListener('click', fetchProjects);
 
-  const isReady = initSupabase();
-  if (isReady) fetchProjects();
+  function startProjects() {
+    const isReady = initSupabase();
+    if (isReady && !hasLoadedProjects) fetchProjects();
+  }
+
+  window.addEventListener('admin:authenticated', startProjects);
 });
