@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Настройки сайта | Админка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <section class="admin-login" id="admin-login" hidden>
+    <form class="admin-login-card" id="admin-login-form">
+      <a class="admin-brand" href="/"><span>АУ</span><div><b>Александр Усольцев</b><small>настройки сайта</small></div></a>
+      <div><p class="eyebrow">Закрытый доступ</p><h1>Вход к настройкам</h1><p>Войдите через email и пароль администратора.</p></div>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Пароль<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="primary" type="submit">Войти</button>
+      <p class="login-status" id="login-status">Доступ только для администратора сайта.</p>
+    </form>
+  </section>
+
+  <main class="admin-shell" id="admin-app" hidden>
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/admin/"><span>АУ</span><div><b>Александр Усольцев</b><small>админка сайта</small></div></a>
+      <nav class="admin-nav"><a class="nav-link-like" href="/admin/">Основная админка</a><a class="nav-link-like" href="/admin/leads/">Заявки</a><button class="active" type="button">Настройки сайта</button></nav>
+      <div class="admin-sidebar-note"><b>Глобальные данные</b><p id="admin-user-note">Телефон, мессенджеры, email, бренд и регион.</p><button class="logout-button" type="button" id="logout-button">Выйти</button></div>
+    </aside>
+    <section class="admin-main">
+      <header class="admin-topbar"><div><p class="eyebrow">Настройки</p><h1>Глобальные данные сайта</h1></div><div class="admin-actions"><button id="refresh-settings" type="button">Обновить</button><a href="/contacts/" target="_blank">Открыть контакты</a></div></header>
+      <section class="admin-status" id="admin-status">Готовим подключение к Supabase...</section>
+      <section class="admin-card image-admin-card">
+        <div class="card-head"><div><p class="eyebrow">Поля</p><h2>Контакты, бренд и служебные ссылки</h2></div></div>
+        <p class="admin-help-text">Эти данные подтягиваются в шапку, футер, кнопки Telegram/WhatsApp, email-ссылки и часть служебных блоков сайта.</p>
+        <div class="settings-list" id="settings-list"></div>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/supabase-config.js"></script>
+  <script src="/admin/auth.js"></script>
+  <script src="/admin/settings/settings.js"></script>
+</body>
+</html>
