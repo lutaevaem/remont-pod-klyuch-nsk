@@ -66,6 +66,12 @@ div{
   line-height:1.5;
 }
 
+.project-fallback[hidden],
+#static-featured-project[hidden],
+#static-project-cards[hidden]{
+  display:none!important;
+}
+
 .project-grid-premium{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
