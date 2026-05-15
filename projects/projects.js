@@ -19,8 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return String(value || '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
   }
 
-  function getProjectImages(project) {
-    return Array.isArray(project.images) ? project.images.filter(Boolean) : [];
+  function normalizeImages(images) {
+    if (!images) return { cover: null, before: null, concept: null, process: null, after: null, extra: [] };
+    if (Array.isArray(images)) {
+      return { cover: images[0] || null, before: images[0] || null, concept: images[1] || null, process: images[2] || null, after: images[3] || null, extra: images.slice(4) };
+    }
+    return {
+      cover: images.cover || null,
+      before: images.before || null,
+      concept: images.concept || null,
+      process: images.process || null,
+      after: images.after || null,
+      extra: Array.isArray(images.extra) ? images.extra : [],
+    };
   }
 
   function imageBlock(src, label) {
@@ -29,14 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderFeatured(project) {
-    const images = getProjectImages(project);
+    const images = normalizeImages(project.images);
     featuredContainer.innerHTML = `
       <div class="container featured-project project-item" data-category="${escapeHtml(categoryToFilter(project.category))}">
         <div class="project-gallery editorial-gallery">
-          ${imageBlock(images[0], 'До')}
-          ${imageBlock(images[1], 'Концепция')}
-          ${imageBlock(images[2], 'Процесс')}
-          ${imageBlock(images[3], 'После')}
+          ${imageBlock(images.before || images.cover, 'До')}
+          ${imageBlock(images.concept, 'Концепция')}
+          ${imageBlock(images.process, 'Процесс')}
+          ${imageBlock(images.after, 'После')}
         </div>
         <div class="project-info">
           <p class="eyebrow">${escapeHtml(categoryLabel(project.category))}</p>
@@ -56,11 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderProjectCards(projects) {
     if (!projectContainer) return;
     projectContainer.innerHTML = projects.map((project) => {
-      const images = getProjectImages(project);
-      const preview = images[0];
+      const images = normalizeImages(project.images);
+      const preview = images.cover || images.after || images.before || images.concept || images.process || images.extra[0];
       return `
         <article class="project-card project-item" data-category="${escapeHtml(categoryToFilter(project.category))}">
-          ${preview ? `<div class="project-photo has-image"><img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}"></div>` : `<div class="project-photo"><span>${escapeHtml(categoryLabel(project.category))}</span></div>`}
+          ${preview ? `<div class="project-photo has-image"><img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}"><span>${escapeHtml(categoryLabel(project.category))}</span></div>` : `<div class="project-photo"><span>${escapeHtml(categoryLabel(project.category))}</span></div>`}
           <h3>${escapeHtml(project.title)}</h3>
           <p>${escapeHtml(project.result || project.client_task || project.scope || 'Проект добавлен в портфолио. Описание можно дополнить в админке.')}</p>
           <a href="/contacts/">Обсудить похожий маршрут</a>
