@@ -10,6 +10,30 @@ function collectUtm() {
   }, {});
 }
 
+function initProjectFilters() {
+  const filterButtons = document.querySelectorAll('.project-filters button[data-filter]');
+  const projectItems = document.querySelectorAll('.project-item[data-category]');
+
+  if (!filterButtons.length || !projectItems.length) return;
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+
+      filterButtons.forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+
+      projectItems.forEach((item) => {
+        const categories = item.dataset.category.split(' ');
+        const shouldShow = filter === 'all' || categories.includes(filter);
+        item.hidden = !shouldShow;
+      });
+    });
+  });
+}
+
+initProjectFilters();
+
 if (form) {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
