@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+async function initSiteContent() {
   function waitForSupabase(retries = 80) {
     return new Promise((resolve) => {
       const tick = () => {
@@ -64,8 +64,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       'renovation.hero.primary_button': '.hero-actions .btn-primary',
       'renovation.visual.title': '.service-visual-band h3',
       'renovation.visual.text': '.service-visual-band p',
-      'renovation.client_change.kicker': '.split .eyebrow',
-      'renovation.client_change.title': '.split h2',
+      'renovation.client_change.kicker': '.section.soft .section-head .eyebrow',
+      'renovation.client_change.title': '.section.soft .section-head h2',
+      'renovation.for_whom.kicker': '.split .eyebrow',
+      'renovation.for_whom.title': '.split h2',
       'renovation.cta.title': '.page-cta-card h2',
       'renovation.cta.text': '.page-cta-card p',
     },
@@ -116,6 +118,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     '/': {
       'home.hero.alexander': '.portrait-placeholder',
       'home.about.alexander': '.about-photo, .founder-photo',
+      'home.projects.preview1': '#projects-preview .project-card:nth-child(1) .project-photo',
+      'home.projects.preview2': '#projects-preview .project-card:nth-child(2) .project-photo',
+      'home.projects.preview3': '#projects-preview .project-card:nth-child(3) .project-photo',
     },
     '/services/remont-pod-klyuch/': { 'renovation.visual.main': '.service-visual-band' },
     '/services/stroitelstvo-pod-klyuch/': { 'construction.visual.main': '.service-visual-band' },
@@ -136,9 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function applyText(contentMap) {
-    document.querySelectorAll('[data-content-key]').forEach((node) => {
-      applyNodeText(node, contentMap[node.dataset.contentKey]);
-    });
+    document.querySelectorAll('[data-content-key]').forEach((node) => applyNodeText(node, contentMap[node.dataset.contentKey]));
 
     const bindings = textBindings[currentPathKey()] || {};
     Object.entries(bindings).forEach(([key, selector]) => {
@@ -147,19 +150,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelectorAll(selector).forEach((node) => applyNodeText(node, value));
     });
 
-    if (contentMap['global.brand.name']) {
-      document.querySelectorAll('.brand b').forEach((node) => applyNodeText(node, contentMap['global.brand.name']));
-    }
-    if (contentMap['global.brand.subtitle']) {
-      document.querySelectorAll('.brand small').forEach((node) => applyNodeText(node, contentMap['global.brand.subtitle']));
-    }
-    if (contentMap['global.phone']) {
-      document.querySelectorAll('.header-phone, .footer-contact-links a[href^="tel:"]').forEach((node) => applyNodeText(node, contentMap['global.phone']));
-    }
+    if (contentMap['global.brand.name']) document.querySelectorAll('.brand b').forEach((node) => applyNodeText(node, contentMap['global.brand.name']));
+    if (contentMap['global.brand.subtitle']) document.querySelectorAll('.brand small').forEach((node) => applyNodeText(node, contentMap['global.brand.subtitle']));
+    if (contentMap['global.phone']) document.querySelectorAll('.header-phone, .footer-contact-links a[href^="tel:"]').forEach((node) => applyNodeText(node, contentMap['global.phone']));
   }
 
   function setBackground(node, imageUrl) {
-    node.style.backgroundImage = `linear-gradient(90deg, rgba(247,242,233,.92) 0%, rgba(247,242,233,.74) 42%, rgba(247,242,233,.18) 100%), url('${imageUrl}')`;
+    node.classList.add('has-image');
+    node.style.backgroundImage = `linear-gradient(90deg, rgba(17,15,12,.18), rgba(17,15,12,.42)), url('${imageUrl}')`;
     node.style.backgroundSize = 'cover';
     node.style.backgroundPosition = 'center';
   }
@@ -171,9 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (node.tagName === 'IMG') {
         node.src = image.image_url;
         node.alt = image.label || node.alt || '';
-      } else {
-        setBackground(node, image.image_url);
-      }
+      } else setBackground(node, image.image_url);
     });
 
     const bindings = imageBindings[currentPathKey()] || {};
@@ -201,4 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     console.warn('Site content loading failed:', error);
   }
-});
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSiteContent);
+else initSiteContent();
