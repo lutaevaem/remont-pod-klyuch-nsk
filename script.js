@@ -5,19 +5,6 @@ function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
 
-function hasStylesheetByHref(part) {
-  return Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some((link) => link.href && link.href.includes(part));
-}
-
-function appendStylesheet(href, dataName) {
-  if (hasStylesheetByHref(href)) return;
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  if (dataName) link.dataset[dataName] = 'true';
-  document.head.appendChild(link);
-}
-
 function appendScript(src, dataName, defer = true) {
   if (hasScriptBySrc(src)) return;
   const script = document.createElement('script');
@@ -37,14 +24,6 @@ function loadMetrika() {
 }
 
 function loadPremiumUi() {
-  // Public pages now load CSS explicitly in HTML. Legal pages keep this temporary fallback
-  // until their long documents are migrated to explicit CSS links as a separate safe step.
-  if (getPageKind() === 'legal') {
-    appendStylesheet('/premium-ui.css', 'premiumUi');
-    appendStylesheet('/design-system-fixes.css', 'designSystemFixes');
-    appendStylesheet('/premium-motion.css', 'premiumMotion');
-    appendStylesheet('/flip-cards.css', 'flipCards');
-  }
   appendScript('/premium-motion.js', 'premiumMotionScript');
   appendScript('/flip-cards.js', 'flipCardsScript');
 }
