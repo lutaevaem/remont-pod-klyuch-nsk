@@ -263,3 +263,18 @@
     transition:none!important;
   }
 }
+
+@media(max-width:640px), (hover:none), (pointer:coarse){
+  html,
+  body{
+    background:#090807!important;
+  }
+
+  body{
+    padding-bottom:0!important;
+  }
+
+  .footer{
+    margin-bottom:0!important;
+  }
+}
