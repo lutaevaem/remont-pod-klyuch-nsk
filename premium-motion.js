@@ -12,6 +12,19 @@
       '.difference-grid article',
       '.project-card',
       '.service-card',
+      '.service-intro article',
+      '.route-grid article',
+      '.route-grid div',
+      '.proof-grid article',
+      '.proof-grid div',
+      '.comparison-grid article',
+      '.budget-grid article',
+      '.timeline article',
+      '.timeline div',
+      '.finish-board article',
+      '.audience-grid article',
+      '.levels-grid article',
+      '.page-link-grid a',
       '.proof-card',
       '.about-card',
       '.featured-project',
@@ -23,16 +36,53 @@
       '.rich-text',
     ];
 
-    function matchesRevealSelector(node) {
-      return revealSelectors.some((selector) => node.matches?.(selector));
+    const cardSelectors = [
+      '.project-card',
+      '.service-card',
+      '.service-intro article',
+      '.difference-grid article',
+      '.route-grid article',
+      '.route-grid div',
+      '.proof-grid article',
+      '.proof-grid div',
+      '.comparison-grid article',
+      '.budget-grid article',
+      '.timeline article',
+      '.timeline div',
+      '.finish-board article',
+      '.audience-grid article',
+      '.levels-grid article',
+      '.page-link-grid a',
+      '.proof-card',
+      '.contact-card',
+    ];
+
+    const staggerGrids = [
+      '.project-grid-premium',
+      '.services-grid',
+      '.difference-grid',
+      '.route-grid',
+      '.proof-grid',
+      '.comparison-grid',
+      '.budget-grid',
+      '.timeline',
+      '.finish-board',
+      '.audience-grid',
+      '.levels-grid',
+      '.page-link-grid',
+      '.service-intro',
+    ];
+
+    function matchesAny(node, selectors) {
+      return selectors.some((selector) => node.matches?.(selector));
     }
 
     function applyRevealToNode(node) {
       if (!(node instanceof HTMLElement)) return;
       if (node.dataset.reveal) return;
       if (node.closest('.hero')) return;
-      if (!matchesRevealSelector(node)) return;
-      node.dataset.reveal = node.matches('.project-card, .service-card, .difference-grid article, .proof-card, .contact-card') ? 'card' : 'soft';
+      if (!matchesAny(node, revealSelectors)) return;
+      node.dataset.reveal = matchesAny(node, cardSelectors) ? 'card' : 'soft';
     }
 
     function markRevealNodes(root = document) {
@@ -42,10 +92,12 @@
         root.querySelectorAll?.(selector).forEach((node) => applyRevealToNode(node));
       });
 
-      document.querySelectorAll('.project-grid-premium, .services-grid, .difference-grid, .route-grid, .proof-grid').forEach((grid) => {
-        Array.from(grid.children).forEach((child, index) => {
-          if (!child.dataset.reveal) return;
-          child.style.setProperty('--reveal-delay', `${Math.min(index * 70, 360)}ms`);
+      staggerGrids.forEach((selector) => {
+        document.querySelectorAll(selector).forEach((grid) => {
+          Array.from(grid.children).forEach((child, index) => {
+            if (!child.dataset.reveal) return;
+            child.style.setProperty('--reveal-delay', `${Math.min(index * 70, 360)}ms`);
+          });
         });
       });
     }
