@@ -1,24 +1,6 @@
 const form = document.querySelector('#lead-form');
 const statusNode = document.querySelector('#form-status');
 
-function injectCriticalHeroTypography() {
-  if (document.querySelector('#critical-hero-typography')) return;
-  const style = document.createElement('style');
-  style.id = 'critical-hero-typography';
-  style.textContent = `
-    .hero{min-height:auto!important;padding:88px 0 78px!important;}
-    .hero h1{font-size:clamp(34px,3.1vw,48px)!important;line-height:1.14!important;letter-spacing:-.035em!important;max-width:820px!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;}
-    .hero-lead{font-size:clamp(16px,1.12vw,18px)!important;line-height:1.58!important;max-width:720px!important;margin-top:22px!important;}
-    .hero-note{font-size:clamp(15px,1vw,17px)!important;line-height:1.52!important;max-width:720px!important;}
-    .lead-form .form-note,#form-status{font-size:12px!important;line-height:1.45!important;margin-top:10px!important;color:rgba(255,250,242,.58)!important;letter-spacing:0!important;font-weight:500!important;max-width:100%!important;}
-    .lead-form #form-status{display:block!important;}
-    @media(max-width:980px){.hero{padding:62px 0 58px!important}.hero h1{font-size:clamp(30px,5vw,40px)!important;line-height:1.15!important;max-width:720px!important}}
-    @media(max-width:640px){.hero{padding:48px 0 44px!important}.hero h1{font-size:clamp(25px,7.2vw,30px)!important;line-height:1.18!important;letter-spacing:-.026em!important;max-width:100%!important}.hero-lead{font-size:15px!important;line-height:1.58!important;margin-top:18px!important}.hero-note{font-size:14px!important;line-height:1.5!important}.hero-actions{margin-top:24px!important}.lead-form .form-note,#form-status{font-size:11px!important;line-height:1.45!important;margin-top:9px!important;}}
-    @media(max-width:390px){.hero h1{font-size:24px!important}}
-  `;
-  document.head.appendChild(style);
-}
-
 function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
@@ -59,7 +41,6 @@ function loadPremiumUi() {
   appendStylesheet('/design-system-fixes.css', 'designSystemFixes');
   appendStylesheet('/premium-motion.css', 'premiumMotion');
   appendStylesheet('/flip-cards.css', 'flipCards');
-  appendStylesheet('/hero-heading-lock.css', 'heroHeadingLock');
   appendScript('/premium-motion.js', 'premiumMotionScript');
   appendScript('/flip-cards.js', 'flipCardsScript');
 }
@@ -115,6 +96,7 @@ function withTimeout(promise, timeoutMs, message) {
 function getPageKind() {
   const path = window.location.pathname;
   const legalPaths = ['/privacy/', '/personal-data-consent/', '/marketing-consent/', '/terms/', '/requisites/'];
+  if (path === '/' || path === '/index.html') return 'home';
   if (legalPaths.includes(path)) return 'legal';
   if (path === '/contacts/' || path === '/contacts') return 'contacts';
   return 'default';
@@ -179,7 +161,7 @@ function injectLegalFooterLinks() {
 
 function injectFinalCta() {
   const kind = getPageKind();
-  if (kind === 'legal' || kind === 'contacts') return;
+  if (kind === 'home' || kind === 'legal' || kind === 'contacts') return;
   document.querySelectorAll('main').forEach((main) => {
     if (main.querySelector('.site-final-cta')) return;
     const finalCta = document.createElement('section');
@@ -265,7 +247,6 @@ async function saveLeadToSupabase(payload) {
   }
 }
 
-injectCriticalHeroTypography();
 loadPremiumUi();
 loadSupabasePublic();
 loadMetrika();
