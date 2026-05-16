@@ -58,7 +58,9 @@ function loadPremiumUi() {
   appendStylesheet('/premium-ui.css', 'premiumUi');
   appendStylesheet('/design-system-fixes.css', 'designSystemFixes');
   appendStylesheet('/premium-motion.css', 'premiumMotion');
+  appendStylesheet('/flip-cards.css', 'flipCards');
   appendScript('/premium-motion.js', 'premiumMotionScript');
+  appendScript('/flip-cards.js', 'flipCardsScript');
 }
 
 function loadSupabasePublic() {
