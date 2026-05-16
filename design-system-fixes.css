@@ -75,6 +75,14 @@ body{
   max-width:720px;
 }
 
+.home-page .hero{
+  align-items:flex-start!important;
+}
+
+.home-page .hero-grid{
+  padding-top:88px!important;
+}
+
 .home-page .hero-tags{
   margin-top:0!important;
   margin-bottom:22px!important;
@@ -236,6 +244,10 @@ body{
   .hero{
     min-height:auto;
     padding:56px 0;
+  }
+
+  .home-page .hero-grid{
+    padding-top:0!important;
   }
 }
 
