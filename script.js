@@ -23,11 +23,6 @@ function loadMetrika() {
   document.head.appendChild(script);
 }
 
-function loadPremiumUi() {
-  appendScript('/premium-motion.js', 'premiumMotionScript');
-  appendScript('/flip-cards.js', 'flipCardsScript');
-}
-
 function loadSupabasePublic() {
   if (!document.querySelector('script[data-supabase-cdn]') && !hasScriptBySrc('@supabase/supabase-js')) {
     const supabaseScript = document.createElement('script');
@@ -230,7 +225,6 @@ async function saveLeadToSupabase(payload) {
   }
 }
 
-loadPremiumUi();
 loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
