@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="hero-typography.css">
 </head>
 <body>
   <header class="site-header" id="top">
@@ -30,81 +31,103 @@
 
   <main>
     <section class="hero section-dark">
-      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-bg"></div>
       <div class="container hero-grid">
-        <div class="hero-content">
-          <p class="eyebrow">Новосибирск и Новосибирский район</p>
+        <div>
+          <div class="hero-tags" aria-label="География работы">
+            <span>Новосибирск и Новосибирский район</span>
+          </div>
           <h1>Не просто ремонт под ключ. Пространство, доведённое до финала.</h1>
           <p class="hero-lead">Подключаемся на нужном этапе: от строительства с нуля и визуальной концепции до ремонта, мебели, техники и финальной подготовки. Собираем проект в один управляемый процесс — без разрозненных подрядчиков и хвоста задач после ремонта.</p>
           <p class="hero-note">Вы принимаете ключевые решения. Мы берём на себя маршрут, координацию, контроль и финальное качество результата.</p>
-          <div class="hero-actions"><a class="btn btn-primary" href="#lead-form">Обсудить проект</a><a class="btn btn-secondary" href="/projects/">Смотреть проекты</a></div>
-          <div class="hero-proof" aria-label="Ключевые отличия">
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/contacts/">Обсудить проект</a>
+            <a class="btn btn-secondary" href="/projects/">Смотреть проекты</a>
+          </div>
+          <div class="hero-proof">
             <div><b>1 контур</b><span>проект, работы, комплектация и сдача связаны в одну систему</span></div>
             <div><b>любой этап</b><span>участок, коробка, черновая отделка, ремонт или комплектация</span></div>
             <div><b>финал</b><span>пространство собирается до состояния завершённости</span></div>
           </div>
         </div>
-        <aside class="hero-person" aria-label="Личная ответственность"><div class="portrait-placeholder"><span>Фото<br>Александра</span></div><div class="signature-card"><b>Александр Усольцев</b><span>личная ответственность за проект</span></div></aside>
+        <div class="hero-person">
+          <div class="portrait-placeholder">Фото<br>Александра</div>
+          <div class="signature-card"><b>Александр Усольцев</b><span>личная ответственность за проект</span></div>
+        </div>
       </div>
     </section>
 
-    <section class="section intro-strip" id="difference">
+    <section class="intro-strip">
       <div class="container difference-grid">
-        <article><span>01</span><h2>Доводим до финала</h2><p>Не останавливаемся на «ремонт закончен». Помогаем собрать пространство до состояния, когда оно выглядит цельно и готово к жизни, сдаче или запуску.</p></article>
-        <article><span>02</span><h2>Ведём проект в одних руках</h2><p>Связываем визуальную концепцию, смету, работы, материалы, мебель, технику и финальную подготовку в один управляемый маршрут.</p></article>
-        <article><span>03</span><h2>Подключаемся на нужном этапе</h2><p>Можно прийти с участком, черновой квартирой, домом без отделки, начатым ремонтом или задачей полной комплектации.</p></article>
+        <article><span>01</span><h2>Доводим до финала</h2><p>Не бросаем проект на этапе ремонта: помогаем собрать пространство до состояния, когда им можно пользоваться.</p></article>
+        <article><span>02</span><h2>Ведём проект в одних руках</h2><p>Связываем работы, материалы, подрядчиков, закупки и контроль в понятный маршрут.</p></article>
+        <article><span>03</span><h2>Подключаемся на нужном этапе</h2><p>Можно начать с участка, коробки, черновой отделки, ремонта, мебели или финальной комплектации.</p></article>
       </div>
     </section>
 
-    <section class="section" id="projects-preview">
-      <div class="container section-head wide"><p class="eyebrow">Проекты</p><h2>Посмотрите, как объект проходит путь от стартовой точки до готового пространства</h2><p>В проектах показываем не только финальный вид, но и путь: с чего начали, что взяли на себя и каким получился результат.</p></div>
+    <section class="section soft" id="projects-preview">
+      <div class="container section-head wide">
+        <p class="eyebrow">Что можно увидеть заранее</p>
+        <h2>Понятно, какой путь проходит объект</h2>
+        <p>Показываем не только красивые кадры, а маршрут: с чего начали, что нужно было решить, какой объём взяли на себя и к какому результату пришли.</p>
+      </div>
       <div class="container project-grid-premium">
-        <article class="project-card"><div class="project-photo">Дом с нуля</div><h3>От участка к пространству для жизни</h3><p>Строительство, отделка, комплектация и финальная сдача дома.</p><a href="/projects/">Смотреть проекты</a></article>
-        <article class="project-card"><div class="project-photo">Квартира под сдачу</div><h3>Готовность к арендатору</h3><p>Ремонт, комплектация, техника, чистота и финал без лишних доработок.</p><a href="/projects/">Смотреть проекты</a></article>
-        <article class="project-card"><div class="project-photo">Коммерция</div><h3>Помещение под запуск</h3><p>Планировка, ремонт, функциональность, визуальный стиль и готовность к работе.</p><a href="/projects/">Смотреть проекты</a></article>
+        <article class="project-card"><div class="project-photo">Квартира</div><h3>Квартира до готовности к жизни</h3><p>От черновой отделки до мебели, техники, света, текстиля и финальной чистоты.</p><a href="/projects/">Смотреть кейс</a></article>
+        <article class="project-card"><div class="project-photo">Дом</div><h3>Дом от участка к пространству</h3><p>Помогаем пройти путь от первых решений до отделки и комплектации.</p><a href="/projects/">Смотреть кейс</a></article>
+        <article class="project-card"><div class="project-photo">Коммерция</div><h3>Помещение под запуск</h3><p>Планировка, ремонт, функциональность, визуальная целостность и готовность к работе.</p><a href="/projects/">Смотреть кейс</a></article>
       </div>
     </section>
 
-    <section class="section soft" id="services">
-      <div class="container section-head wide"><p class="eyebrow">Направления</p><h2>Выберите формат, который ближе к вашей задаче</h2><p>Можно начать со строительства, ремонта или комплектации. Мы подскажем маршрут под вашу стартовую точку и желаемый финал.</p></div>
-      <div class="container card-grid three">
-        <article class="card"><h3>Ремонт под ключ</h3><p>От черновой отделки до завершённого пространства без списка «доделать потом».</p><p><a href="/services/remont-pod-klyuch/">Подробнее →</a></p></article>
-        <article class="card"><h3>Строительство под ключ</h3><p>От участка, идеи и первых решений до строительства, отделки и сдачи результата.</p><p><a href="/services/stroitelstvo-pod-klyuch/">Подробнее →</a></p></article>
-        <article class="card accent"><h3>Комплектация объекта</h3><p>Мебель, техника, свет, текстиль, детали и финальная подготовка пространства.</p><p><a href="/services/komplektatsiya-obekta/">Подробнее →</a></p></article>
+    <section class="section section-dark" id="services">
+      <div class="container section-head wide">
+        <p class="eyebrow">Форматы работы</p>
+        <h2>Можно подключиться к проекту на любом этапе</h2>
+        <p>Если пространство уже начато, его можно довести до порядка. Если есть только участок или идея — можно выстроить маршрут с самого начала.</p>
       </div>
-    </section>
-
-    <section class="section" id="entry">
-      <div class="container section-head wide"><p class="eyebrow">С какого этапа можно прийти</p><h2>Вы приходите со своей стартовой точкой. Мы собираем маршрут до финала.</h2></div>
       <div class="container route-grid">
-        <article><b>Участок или идея</b><p>Маршрут к строительству, отделке, комплектации и сдаче.</p></article>
-        <article><b>Дом без отделки</b><p>Инженерия, ремонт, материалы, мебель, техника и подготовка к жизни.</p></article>
-        <article><b>Квартира в новостройке</b><p>От черновой отделки до цельного интерьера без списка «доделать потом».</p></article>
-        <article><b>Начатый ремонт</b><p>Разбор текущей ситуации, рисков и дальнейшего маршрута.</p></article>
-        <article><b>Ремонт без завершённости</b><p>Комплектация: мебель, техника, свет, текстиль, детали и клининг.</p></article>
-        <article><b>Коммерческое помещение</b><p>Планировка, ремонт, визуальный стиль, функциональность и запуск.</p></article>
+        <article><b>Ремонт под ключ</b><p>От визуальной концепции и сметы до отделки, контроля этапов и финальной подготовки.</p></article>
+        <article><b>Строительство под ключ</b><p>Понятный путь от участка, идеи и коробки до дома, который можно довести до готовности.</p></article>
+        <article><b>Комплектация объекта</b><p>Мебель, техника, свет, текстиль, бытовые детали и всё, что делает пространство завершённым.</p></article>
       </div>
     </section>
 
-    <section class="section soft" id="about">
-      <div class="container about-card premium-about"><div class="about-photo">Фото Александра</div><div><p class="eyebrow">Кто отвечает за проект</p><h2>У проекта есть лицо. За результат отвечает Александр Усольцев.</h2><p>В проектах под ключ важно не только качество работ, но и управление целым: сметой, сроками, подрядчиками, материалами, комплектацией и финальной сдачей.</p><p>Александр участвует в ключевых договорённостях, контроле этапов и принятии результата.</p><div class="quote-card">Личная ответственность — когда у проекта есть конкретное лицо, а не только «бригада».</div></div></div>
+    <section class="section" id="about">
+      <div class="container about-card premium-about">
+        <div class="about-photo">Фото</div>
+        <div>
+          <p class="eyebrow">Подход</p>
+          <h2>Проект должен быть управляемым, а финал — предсказуемым</h2>
+          <p>Когда за ремонт, материалы, мебель, технику и финальную подготовку отвечают разные люди, клиент часто остаётся координатором всего процесса. Мы собираем эти части в один контур, чтобы объект двигался к понятному результату.</p>
+          <div class="quote-card">«Задача не просто сделать красиво. Задача — довести пространство до состояния, где всё на своём месте и готово к жизни, сдаче или запуску».</div>
+          <ul class="principles"><li>понятный маршрут</li><li>контроль этапов</li><li>связь работ и комплектации</li><li>финальная ответственность</li></ul>
+        </div>
+      </div>
     </section>
 
     <section class="section section-dark" id="contacts">
       <div class="container contact-grid">
-        <div><p class="eyebrow">Заявка</p><h2>Расскажите об объекте — подскажем маршрут к готовому пространству</h2><p>Напишите, что у вас сейчас: участок, идея, черновой объект, начатый ремонт, квартира под сдачу, дом или коммерческое помещение.</p><div class="contact-links"><a href="tel:+79137998808">+7 (913) 799-88-08</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a></div></div>
+        <div>
+          <p class="eyebrow">Начать с разбора</p>
+          <h2>Расскажите, на каком этапе сейчас объект</h2>
+          <p>Для предварительного разговора достаточно описать объект, площадь, район, текущую стадию и желаемый результат. Если есть фото или видео — они ускорят оценку.</p>
+          <div class="contact-links"><a href="tel:+79137998808">+7 (913) 799-88-08</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a></div>
+        </div>
         <form class="lead-form" id="lead-form">
-          <label>Имя<input name="name" autocomplete="name" required></label><label>Телефон<input name="phone" autocomplete="tel" required></label>
-          <label>Тип объекта<select name="object_type"><option>Дом / коттедж</option><option>Квартира</option><option>Коммерческое помещение</option><option>Участок</option><option>Другое</option></select></label>
-          <label>Какой формат нужен<select name="service"><option>Строительство под ключ</option><option>Ремонт под ключ</option><option>Ремонт + визуальная концепция</option><option>Объект с мебелью и техникой</option><option>Полная комплектация</option><option>Пока нужна консультация</option></select></label>
+          <label>Имя<input name="name" required></label>
+          <label>Телефон<input name="phone" required type="tel"></label>
+          <label>Тип объекта<select name="type"><option>Квартира</option><option>Дом / коттедж</option><option>Коммерческое помещение</option><option>Участок / строительство</option></select></label>
+          <label>Какой формат нужен<select name="format"><option>Ремонт под ключ</option><option>Строительство под ключ</option><option>Комплектация объекта</option><option>Пока не знаю, нужна консультация</option></select></label>
           <label>Площадь / район / сроки / комментарий<textarea name="message" rows="4" placeholder="Например: квартира 82 м², новостройка, Заельцовский район"></textarea></label>
-          <input type="hidden" name="source" value="website"><button class="btn btn-primary" type="submit">Получить предварительный разбор</button><p class="form-note" id="form-status">Свяжемся, уточним вводные и подскажем, какой формат подойдёт вашему объекту.</p>
+          <button class="btn btn-primary" type="submit">Получить предварительный разбор</button>
+          <p class="form-note" id="form-status">Свяжемся, уточним вводные и подскажем, какой формат подойдёт вашему объекту.</p>
         </form>
       </div>
     </section>
   </main>
 
-  <div class="mobile-sticky-cta" style="grid-template-columns: repeat(3, 1fr);" aria-label="Быстрые действия"><a href="#lead-form">Обсудить</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a></div>
+  <div class="mobile-sticky-cta" style="grid-template-columns: repeat(3, 1fr);">
+    <a href="/contacts/">Обсудить</a><a href="https://t.me/UsoltcevAG" target="_blank">Telegram</a><a href="https://wa.me/79137998808" target="_blank">WhatsApp</a>
+  </div>
   <footer class="footer"><div class="container footer-grid"><span>© Александр Усольцев</span><a href="#top">Наверх</a></div></footer>
   <script src="script.js"></script>
 </body>
