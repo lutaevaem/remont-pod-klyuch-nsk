@@ -75,6 +75,11 @@ body{
   max-width:720px;
 }
 
+.home-page .hero-tags{
+  margin-top:0!important;
+  margin-bottom:22px!important;
+}
+
 .section-head p,
 .rich-text p,
 .about-card p,
