@@ -1,7 +1,12 @@
-/* Critical hero typography overrides. Loaded in <head> to prevent oversized first-screen titles. */
+/* Critical typography overrides. Loaded early to prevent oversized first-screen and section text. */
+body{
+  font-size:15px!important;
+  line-height:1.55!important;
+}
+
 .hero{
   min-height:auto!important;
-  padding:88px 0 78px!important;
+  padding:84px 0 72px!important;
 }
 
 .hero h1{
@@ -15,21 +20,145 @@
 }
 
 .hero-lead{
-  font-size:clamp(16px,1.12vw,18px)!important;
+  font-size:clamp(15px,1.05vw,17px)!important;
   line-height:1.58!important;
-  max-width:720px!important;
-  margin-top:22px!important;
+  max-width:700px!important;
+  margin-top:20px!important;
 }
 
 .hero-note{
-  font-size:clamp(15px,1vw,17px)!important;
-  line-height:1.52!important;
-  max-width:720px!important;
+  font-size:clamp(14px,.95vw,16px)!important;
+  line-height:1.5!important;
+  max-width:700px!important;
+}
+
+.eyebrow{
+  font-size:11px!important;
+  line-height:1.25!important;
+  letter-spacing:.14em!important;
+  margin-bottom:12px!important;
+}
+
+.hero-tags span,
+.project-gallery span,
+.project-card-meta span,
+.principles li,
+.hero-proof span,
+.proof-grid span{
+  font-size:11px!important;
+  line-height:1.25!important;
+}
+
+.section{
+  padding:82px 0!important;
+}
+
+.section-head{
+  margin-bottom:34px!important;
+}
+
+.section-head h2,
+.split h2,
+.contact-grid h2,
+.about-card h2,
+.page-cta-card h2,
+.final-cta-title{
+  font-size:clamp(26px,2.45vw,34px)!important;
+  line-height:1.16!important;
+  letter-spacing:-.03em!important;
+}
+
+.section-head p,
+.rich-text p,
+.about-card p,
+.contact-grid p,
+.page-cta-card p,
+.final-cta-text,
+.card p,
+.price-card p,
+.case-card p,
+.audience-grid p,
+.levels-grid p,
+.budget-grid p,
+.route-grid p,
+.timeline p,
+.project-card p,
+.project-info dd,
+.faq-list p,
+.form-note{
+  font-size:15px!important;
+  line-height:1.58!important;
+}
+
+.card h3,
+.price-card h3,
+.case-card h3,
+.audience-grid h3,
+.levels-grid h3,
+.route-grid b,
+.timeline b,
+.project-card h3,
+.comparison-grid b,
+.budget-grid b,
+.finish-board b,
+.project-info h3,
+.faq-list summary{
+  font-size:clamp(18px,1.55vw,22px)!important;
+  line-height:1.2!important;
+  letter-spacing:-.018em!important;
+}
+
+.difference-grid h2{
+  font-size:clamp(20px,1.7vw,24px)!important;
+  line-height:1.15!important;
+}
+
+.hero-proof b,
+.proof-grid b{
+  font-size:17px!important;
+  line-height:1.15!important;
+}
+
+.btn,
+.header-phone,
+.contact-links a,
+.final-cta-actions a,
+.mobile-sticky-cta a,
+.project-card a,
+.project-filters button,
+.lead-form label{
+  font-size:13px!important;
+  line-height:1.25!important;
+}
+
+.btn{
+  min-height:50px!important;
+  padding:0 22px!important;
+}
+
+.lead-form input,
+.lead-form select,
+.lead-form textarea{
+  font-size:15px!important;
+  line-height:1.45!important;
+}
+
+.review-card p{
+  font-size:20px!important;
+  line-height:1.45!important;
+}
+
+.signature-card b{
+  font-size:24px!important;
+}
+
+.signature-card span{
+  font-size:15px!important;
 }
 
 @media(max-width:980px){
   .hero{
-    padding:62px 0 58px!important;
+    padding:58px 0 54px!important;
   }
 
   .hero h1{
@@ -37,11 +166,28 @@
     line-height:1.15!important;
     max-width:720px!important;
   }
+
+  .section{
+    padding:68px 0!important;
+  }
+
+  .section-head h2,
+  .split h2,
+  .contact-grid h2,
+  .about-card h2,
+  .page-cta-card h2,
+  .final-cta-title{
+    font-size:clamp(24px,4vw,32px)!important;
+  }
 }
 
 @media(max-width:640px){
+  body{
+    font-size:14px!important;
+  }
+
   .hero{
-    padding:48px 0 44px!important;
+    padding:44px 0 40px!important;
   }
 
   .hero h1{
@@ -52,23 +198,113 @@
   }
 
   .hero-lead{
-    font-size:15px!important;
+    font-size:14px!important;
     line-height:1.58!important;
-    margin-top:18px!important;
+    margin-top:16px!important;
   }
 
   .hero-note{
-    font-size:14px!important;
+    font-size:13px!important;
     line-height:1.5!important;
   }
 
   .hero-actions{
-    margin-top:24px!important;
+    margin-top:22px!important;
+  }
+
+  .section{
+    padding:58px 0!important;
+  }
+
+  .section-head{
+    margin-bottom:26px!important;
+  }
+
+  .section-head h2,
+  .split h2,
+  .contact-grid h2,
+  .about-card h2,
+  .page-cta-card h2,
+  .final-cta-title{
+    font-size:clamp(22px,6.2vw,28px)!important;
+    line-height:1.18!important;
+  }
+
+  .section-head p,
+  .rich-text p,
+  .about-card p,
+  .contact-grid p,
+  .page-cta-card p,
+  .final-cta-text,
+  .card p,
+  .route-grid p,
+  .timeline p,
+  .project-card p,
+  .project-info dd,
+  .faq-list p,
+  .form-note{
+    font-size:14px!important;
+    line-height:1.58!important;
+  }
+
+  .card h3,
+  .price-card h3,
+  .case-card h3,
+  .audience-grid h3,
+  .levels-grid h3,
+  .route-grid b,
+  .timeline b,
+  .project-card h3,
+  .comparison-grid b,
+  .budget-grid b,
+  .finish-board b,
+  .project-info h3,
+  .faq-list summary{
+    font-size:18px!important;
+    line-height:1.22!important;
+  }
+
+  .difference-grid h2{
+    font-size:19px!important;
+  }
+
+  .btn,
+  .header-phone,
+  .contact-links a,
+  .final-cta-actions a,
+  .mobile-sticky-cta a,
+  .project-card a,
+  .project-filters button,
+  .lead-form label{
+    font-size:12px!important;
+  }
+
+  .btn{
+    min-height:46px!important;
+  }
+
+  .lead-form input,
+  .lead-form select,
+  .lead-form textarea{
+    font-size:15px!important;
+  }
+
+  .mobile-sticky-cta a{
+    font-size:11px!important;
   }
 }
 
 @media(max-width:390px){
   .hero h1{
     font-size:24px!important;
+  }
+
+  .section-head h2,
+  .split h2,
+  .contact-grid h2,
+  .about-card h2,
+  .page-cta-card h2,
+  .final-cta-title{
+    font-size:22px!important;
   }
 }
