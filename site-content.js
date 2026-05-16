@@ -151,6 +151,10 @@ async function initSiteContent() {
 
   function applyText(contentMap) {
     document.querySelectorAll('[data-content-key]').forEach((node) => applyNodeText(node, contentMap[node.dataset.contentKey]));
+    document.querySelectorAll('[data-placeholder-key]').forEach((node) => {
+      const value = contentMap[node.dataset.placeholderKey];
+      if (value) node.setAttribute('placeholder', value);
+    });
 
     const bindings = textBindings[currentPathKey()] || {};
     Object.entries(bindings).forEach(([key, selector]) => {
@@ -165,6 +169,9 @@ async function initSiteContent() {
     if (contentMap['global.brand.name']) document.querySelectorAll('.brand b').forEach((node) => applyNodeText(node, contentMap['global.brand.name']));
     if (contentMap['global.brand.subtitle']) document.querySelectorAll('.brand small').forEach((node) => applyNodeText(node, contentMap['global.brand.subtitle']));
     if (contentMap['global.phone']) document.querySelectorAll('.header-phone, .footer-contact-links a[href^="tel:"]').forEach((node) => applyNodeText(node, contentMap['global.phone']));
+    if (contentMap['global.flip.open']) document.querySelectorAll('.flip-card__toggle').forEach((node) => {
+      if (node.getAttribute('aria-expanded') !== 'true') applyNodeText(node, contentMap['global.flip.open']);
+    });
   }
 
   function applySettings(settingsMap) {
