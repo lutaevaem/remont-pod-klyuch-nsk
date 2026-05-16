@@ -140,6 +140,11 @@
           <label>Тип объекта<select name="type"><option>Квартира</option><option>Дом / коттедж</option><option>Коммерческое помещение</option><option>Участок / строительство</option></select></label>
           <label>Какой формат нужен<select name="format"><option>Ремонт под ключ</option><option>Строительство под ключ</option><option>Комплектация объекта</option><option>Пока не знаю, нужна консультация</option></select></label>
           <label>Площадь / район / сроки / комментарий<textarea name="message" rows="4" placeholder="Например: квартира 82 м², новостройка, Заельцовский район"></textarea></label>
+          <div class="legal-consents">
+            <label class="consent-line"><input type="checkbox" name="personal_data_consent" required><span>Я даю <a href="/personal-data-consent/" target="_blank">согласие на обработку персональных данных</a> и соглашаюсь с <a href="/privacy/" target="_blank">Политикой обработки персональных данных</a>.</span></label>
+            <label class="consent-line"><input type="checkbox" name="marketing_consent" value="yes"><span>Согласен(на) получать рекламно-информационные материалы: предложения, новости и полезные материалы о строительстве, ремонте и комплектации объектов. <a href="/marketing-consent/" target="_blank">Подробнее</a>.</span></label>
+            <p class="legal-note">Данные используются для связи по вашей заявке и подготовки предварительного разбора объекта.</p>
+          </div>
           <button class="btn btn-primary" type="submit">Получить предварительный разбор</button>
           <p class="form-note" id="form-status">Свяжемся, уточним вводные и подскажем, какой формат подойдёт вашему объекту.</p>
         </form>
