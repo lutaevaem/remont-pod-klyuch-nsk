@@ -33,16 +33,16 @@ async function initSiteContent() {
       'home.proof.item3.text': '.hero-proof > div:nth-child(3) span',
       'home.projects.kicker': '#projects-preview .section-head .eyebrow',
       'home.projects.title': '#projects-preview .section-head h2',
-      'home.projects.text': '#projects-preview .section-head p',
+      'home.projects.text': '#projects-preview .section-head p:not(.eyebrow)',
       'home.services.kicker': '#services .section-head .eyebrow',
       'home.services.title': '#services .section-head h2',
-      'home.services.text': '#services .section-head p',
+      'home.services.text': '#services .section-head p:not(.eyebrow)',
       'home.about.kicker': '#about .eyebrow',
       'home.about.title': '#about h2',
       'home.about.quote': '#about .quote-card',
       'home.form.kicker': '#contacts .contact-grid .eyebrow',
       'home.form.title': '#contacts .contact-grid h2',
-      'home.form.text': '#contacts .contact-grid p',
+      'home.form.text': '#contacts .contact-grid p:not(.eyebrow):not(.form-note)',
     },
     '/projects/': {
       'projects.hero.kicker': '.hero .eyebrow',
@@ -51,7 +51,7 @@ async function initSiteContent() {
       'projects.hero.note': '.hero .hero-note',
       'projects.filters.kicker': '.section-head .eyebrow',
       'projects.filters.title': '.section-head h2',
-      'projects.filters.text': '.section-head p',
+      'projects.filters.text': '.section-head p:not(.eyebrow)',
       'projects.cta.title': '.page-cta-card h2',
       'projects.cta.text': '.page-cta-card p',
       'projects.cta.button': '.page-cta-card .btn-primary',
@@ -109,7 +109,7 @@ async function initSiteContent() {
       'contacts.intro.item3.text': '.difference-grid article:nth-child(3) p',
       'contacts.form.kicker': '.contact-grid .eyebrow',
       'contacts.form.title': '.contact-grid h2',
-      'contacts.form.text': '.contact-grid p',
+      'contacts.form.text': '.contact-grid p:not(.eyebrow):not(.form-note)',
       'contacts.form.note': '.quote-card',
     },
   };
@@ -156,7 +156,10 @@ async function initSiteContent() {
     Object.entries(bindings).forEach(([key, selector]) => {
       const value = contentMap[key];
       if (!value) return;
-      document.querySelectorAll(selector).forEach((node) => applyNodeText(node, value));
+      document.querySelectorAll(selector).forEach((node) => {
+        if (node.dataset.contentKey && node.dataset.contentKey !== key) return;
+        applyNodeText(node, value);
+      });
     });
 
     if (contentMap['global.brand.name']) document.querySelectorAll('.brand b').forEach((node) => applyNodeText(node, contentMap['global.brand.name']));
