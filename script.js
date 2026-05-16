@@ -59,6 +59,7 @@ function loadPremiumUi() {
   appendStylesheet('/design-system-fixes.css', 'designSystemFixes');
   appendStylesheet('/premium-motion.css', 'premiumMotion');
   appendStylesheet('/flip-cards.css', 'flipCards');
+  appendStylesheet('/hero-heading-lock.css', 'heroHeadingLock');
   appendScript('/premium-motion.js', 'premiumMotionScript');
   appendScript('/flip-cards.js', 'flipCardsScript');
 }
