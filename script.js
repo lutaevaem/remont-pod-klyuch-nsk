@@ -93,18 +93,6 @@ function initProjectFilters() {
   });
 }
 
-function injectFormConsents() {
-  document.querySelectorAll('.lead-form').forEach((leadForm) => {
-    if (leadForm.querySelector('.legal-consents')) return;
-    const submitButton = leadForm.querySelector('button[type="submit"]');
-    if (!submitButton) return;
-    const consents = document.createElement('div');
-    consents.className = 'legal-consents';
-    consents.innerHTML = `<label class="consent-line"><input type="checkbox" name="personal_data_consent" required><span>Я даю <a href="/personal-data-consent/" target="_blank">согласие на обработку персональных данных</a> и соглашаюсь с <a href="/privacy/" target="_blank">Политикой обработки персональных данных</a>.</span></label><label class="consent-line"><input type="checkbox" name="marketing_consent" value="yes"><span>Согласен(на) получать рекламно-информационные материалы: предложения, новости и полезные материалы о строительстве, ремонте и комплектации объектов. <a href="/marketing-consent/" target="_blank">Подробнее</a>.</span></label><p class="legal-note">Данные используются для связи по вашей заявке и подготовки предварительного разбора объекта.</p>`;
-    leadForm.insertBefore(consents, submitButton);
-  });
-}
-
 function initCookieBanner() {
   if (localStorage.getItem('cookieConsentAccepted') === 'yes') return;
   const banner = document.createElement('div');
@@ -172,7 +160,6 @@ async function saveLeadToSupabase(payload) {
 loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
-injectFormConsents();
 initCookieBanner();
 
 if (form) {
