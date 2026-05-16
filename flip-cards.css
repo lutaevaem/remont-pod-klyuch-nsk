@@ -145,21 +145,36 @@
 
 @media(max-width:640px), (hover:none), (pointer:coarse){
   .flip-card{
-    min-height:168px;
+    min-height:206px;
   }
 
   .hero-proof .flip-card{
-    min-height:172px;
+    min-height:218px;
   }
 
   .flip-card__front,
   .flip-card__back{
     justify-content:flex-start;
-    padding-bottom:58px!important;
+    padding:22px 18px 76px!important;
+  }
+
+  .flip-card__back p{
+    max-width:100%;
+    font-size:11px!important;
+    line-height:1.34!important;
+  }
+
+  .flip-card__label{
+    font-size:10px!important;
+    line-height:1!important;
   }
 
   .flip-card__toggle{
     display:block;
+    left:18px;
+    right:18px;
+    bottom:16px;
+    min-height:36px;
   }
 
   .hero-proof .flip-card__front b,
@@ -167,9 +182,30 @@
     font-size:17px;
   }
 
-  .flip-card__front small,
-  .flip-card__back p{
+  .flip-card__front small{
     font-size:12px!important;
+    line-height:1.35!important;
+  }
+}
+
+@media(max-width:390px){
+  .flip-card{
+    min-height:216px;
+  }
+
+  .hero-proof .flip-card{
+    min-height:232px;
+  }
+
+  .flip-card__front,
+  .flip-card__back{
+    padding:20px 16px 78px!important;
+  }
+
+  .flip-card__toggle{
+    left:16px;
+    right:16px;
+    bottom:16px;
   }
 }
 
