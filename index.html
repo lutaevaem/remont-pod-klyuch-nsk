@@ -22,13 +22,13 @@
 </head>
 <body class="home-page">
   <header class="site-header" id="top">
-    <a class="brand" href="/" aria-label="На главную"><span class="brand-mark">АУ</span><span><b>Александр Усольцев</b><small>пространства под ключ</small></span></a>
+    <a class="brand" href="/" aria-label="На главную"><span class="brand-mark" data-content-key="global.brand.mark">АУ</span><span><b>Александр Усольцев</b><small>пространства под ключ</small></span></a>
     <nav class="nav" aria-label="Основная навигация">
-      <a href="/projects/">Проекты</a>
-      <a href="/services/remont-pod-klyuch/">Ремонт</a>
-      <a href="/services/stroitelstvo-pod-klyuch/">Строительство</a>
-      <a href="/services/komplektatsiya-obekta/">Комплектация</a>
-      <a href="/contacts/">Контакты</a>
+      <a href="/projects/" data-content-key="global.nav.projects">Проекты</a>
+      <a href="/services/remont-pod-klyuch/" data-content-key="global.nav.renovation">Ремонт</a>
+      <a href="/services/stroitelstvo-pod-klyuch/" data-content-key="global.nav.construction">Строительство</a>
+      <a href="/services/komplektatsiya-obekta/" data-content-key="global.nav.furnishing">Комплектация</a>
+      <a href="/contacts/" data-content-key="global.nav.contacts">Контакты</a>
     </nav>
     <a class="header-phone" href="tel:+79137998808">+7 (913) 799-88-08</a>
   </header>
@@ -52,29 +52,29 @@
             <article class="flip-card">
               <div class="flip-card__inner">
                 <div class="flip-card__front"><b data-content-key="home.proof.item1.title">Единый контур</b><small data-content-key="home.proof.item1.text">Проект, работы и сдача связаны в одну систему.</small></div>
-                <div class="flip-card__back"><span class="flip-card__label">подробнее</span><p data-content-key="home.proof.item1.details">Материалы, подрядчики, комплектация и финальная подготовка не живут отдельно — всё собирается в управляемый маршрут.</p></div>
+                <div class="flip-card__back"><span class="flip-card__label" data-content-key="global.flip.label">подробнее</span><p data-content-key="home.proof.item1.details">Материалы, подрядчики, комплектация и финальная подготовка не живут отдельно — всё собирается в управляемый маршрут.</p></div>
               </div>
               <button class="flip-card__toggle" type="button" aria-expanded="false">Подробнее</button>
             </article>
             <article class="flip-card">
               <div class="flip-card__inner">
                 <div class="flip-card__front"><b data-content-key="home.proof.item2.title">Любой этап</b><small data-content-key="home.proof.item2.text">Можно начать с участка, коробки, ремонта или финала.</small></div>
-                <div class="flip-card__back"><span class="flip-card__label">подробнее</span><p data-content-key="home.proof.item2.details">Подключаемся там, где проекту нужна система: от первых решений до комплектации, клининга и готовности к жизни или запуску.</p></div>
+                <div class="flip-card__back"><span class="flip-card__label" data-content-key="global.flip.label">подробнее</span><p data-content-key="home.proof.item2.details">Подключаемся там, где проекту нужна система: от первых решений до комплектации, клининга и готовности к жизни или запуску.</p></div>
               </div>
               <button class="flip-card__toggle" type="button" aria-expanded="false">Подробнее</button>
             </article>
             <article class="flip-card">
               <div class="flip-card__inner">
                 <div class="flip-card__front"><b data-content-key="home.proof.item3.title">Финал без хвостов</b><small data-content-key="home.proof.item3.text">Объект доводится до состояния готовности.</small></div>
-                <div class="flip-card__back"><span class="flip-card__label">подробнее</span><p data-content-key="home.proof.item3.details">Цель — не просто закончить работы, а собрать пространство, которым можно пользоваться, жить, сдавать или открывать для клиентов.</p></div>
+                <div class="flip-card__back"><span class="flip-card__label" data-content-key="global.flip.label">подробнее</span><p data-content-key="home.proof.item3.details">Цель — не просто закончить работы, а собрать пространство, которым можно пользоваться, жить, сдавать или открывать для клиентов.</p></div>
               </div>
               <button class="flip-card__toggle" type="button" aria-expanded="false">Подробнее</button>
             </article>
           </div>
         </div>
         <div class="hero-person">
-          <div class="portrait-placeholder">Фото<br>Александра</div>
-          <div class="signature-card"><b>Александр Усольцев</b><span data-content-key="home.hero.signature">личная ответственность за проект</span></div>
+          <div class="portrait-placeholder" data-content-key="home.hero.photo_label">Фото Александра</div>
+          <div class="signature-card"><b data-content-key="home.hero.person_name">Александр Усольцев</b><span data-content-key="home.hero.signature">личная ответственность за проект</span></div>
         </div>
       </div>
     </section>
@@ -115,7 +115,7 @@
 
     <section class="section" id="about">
       <div class="container about-card premium-about">
-        <div class="about-photo">Фото</div>
+        <div class="about-photo" data-content-key="home.about.photo_label">Фото</div>
         <div>
           <p class="eyebrow" data-content-key="home.about.kicker">Подход</p>
           <h2 data-content-key="home.about.title">Проект должен быть управляемым, а финал — предсказуемым</h2>
@@ -132,14 +132,14 @@
           <p class="eyebrow" data-content-key="home.form.kicker">Начать с разбора</p>
           <h2 data-content-key="home.form.title">Расскажите, на каком этапе сейчас объект</h2>
           <p data-content-key="home.form.text">Для предварительного разговора достаточно описать объект, площадь, район, текущую стадию и желаемый результат. Если есть фото или видео — они ускорят оценку.</p>
-          <div class="contact-links"><a href="tel:+79137998808">+7 (913) 799-88-08</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a></div>
+          <div class="contact-links"><a href="tel:+79137998808">+7 (913) 799-88-08</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer" data-content-key="global.contact.telegram_label">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer" data-content-key="global.contact.whatsapp_label">WhatsApp</a></div>
         </div>
         <form class="lead-form" id="lead-form">
-          <label>Имя<input name="name" required></label>
-          <label>Телефон<input name="phone" required type="tel"></label>
-          <label>Тип объекта<select name="type"><option>Квартира</option><option>Дом / коттедж</option><option>Коммерческое помещение</option><option>Участок / строительство</option></select></label>
-          <label>Какой формат нужен<select name="format"><option>Ремонт под ключ</option><option>Строительство под ключ</option><option>Комплектация объекта</option><option>Пока не знаю, нужна консультация</option></select></label>
-          <label>Площадь / район / сроки / комментарий<textarea name="message" rows="4" placeholder="Например: квартира 82 м², новостройка, Заельцовский район"></textarea></label>
+          <label><span data-content-key="home.form.field.name">Имя</span><input name="name" required></label>
+          <label><span data-content-key="home.form.field.phone">Телефон</span><input name="phone" required type="tel"></label>
+          <label><span data-content-key="home.form.field.object_type">Тип объекта</span><select name="type"><option data-content-key="home.form.option.apartment">Квартира</option><option data-content-key="home.form.option.house">Дом / коттедж</option><option data-content-key="home.form.option.commercial">Коммерческое помещение</option><option data-content-key="home.form.option.land">Участок / строительство</option></select></label>
+          <label><span data-content-key="home.form.field.format">Какой формат нужен</span><select name="format"><option data-content-key="home.form.option.renovation">Ремонт под ключ</option><option data-content-key="home.form.option.construction">Строительство под ключ</option><option data-content-key="home.form.option.furnishing">Комплектация объекта</option><option data-content-key="home.form.option.consultation">Пока не знаю, нужна консультация</option></select></label>
+          <label><span data-content-key="home.form.field.message">Площадь / район / сроки / комментарий</span><textarea name="message" rows="4" placeholder="Например: квартира 82 м², новостройка, Заельцовский район"></textarea></label>
           <div class="legal-consents">
             <label class="consent-line"><input type="checkbox" name="personal_data_consent" required><span>Я даю <a href="/personal-data-consent/" target="_blank">согласие на обработку персональных данных</a> и соглашаюсь с <a href="/privacy/" target="_blank">Политикой обработки персональных данных</a>.</span></label>
             <label class="consent-line"><input type="checkbox" name="marketing_consent" value="yes"><span>Согласен(на) получать рекламно-информационные материалы: предложения, новости и полезные материалы о строительстве, ремонте и комплектации объектов. <a href="/marketing-consent/" target="_blank">Подробнее</a>.</span></label>
@@ -153,29 +153,29 @@
   </main>
 
   <div class="mobile-sticky-cta" style="grid-template-columns: repeat(3, 1fr);">
-    <a href="/contacts/">Обсудить</a><a href="https://t.me/UsoltcevAG" target="_blank">Telegram</a><a href="https://wa.me/79137998808" target="_blank">WhatsApp</a>
+    <a href="/contacts/" data-content-key="global.sticky.discuss">Обсудить</a><a href="https://t.me/UsoltcevAG" target="_blank" data-content-key="global.sticky.telegram">Telegram</a><a href="https://wa.me/79137998808" target="_blank" data-content-key="global.sticky.whatsapp">WhatsApp</a>
   </div>
   <footer class="footer">
     <div class="container footer-grid">
-      <span>© Александр Усольцев</span>
+      <span data-content-key="global.footer.copyright">© Александр Усольцев</span>
       <div class="footer-contact-links">
         <a href="tel:+79137998808">+7 (913) 799-88-08</a>
-        <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
-        <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer" data-content-key="global.footer.telegram">Telegram</a>
+        <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer" data-content-key="global.footer.whatsapp">WhatsApp</a>
         <a href="mailto:i@usoltsev-top.ru">i@usoltsev-top.ru</a>
       </div>
       <div class="footer-site-links">
-        <a href="/projects/">Проекты</a>
-        <a href="/services/remont-pod-klyuch/">Ремонт под ключ</a>
-        <a href="/services/stroitelstvo-pod-klyuch/">Строительство</a>
-        <a href="/services/komplektatsiya-obekta/">Комплектация</a>
-        <a href="/contacts/">Контакты</a>
+        <a href="/projects/" data-content-key="global.footer.projects">Проекты</a>
+        <a href="/services/remont-pod-klyuch/" data-content-key="global.footer.renovation">Ремонт под ключ</a>
+        <a href="/services/stroitelstvo-pod-klyuch/" data-content-key="global.footer.construction">Строительство</a>
+        <a href="/services/komplektatsiya-obekta/" data-content-key="global.footer.furnishing">Комплектация</a>
+        <a href="/contacts/" data-content-key="global.footer.contacts">Контакты</a>
       </div>
       <div class="legal-footer-links">
-        <a href="/privacy/">Политика обработки персональных данных</a>
-        <a href="/personal-data-consent/">Согласие на обработку персональных данных</a>
-        <a href="/marketing-consent/">Согласие на рекламно-информационные материалы</a>
-        <a href="/requisites/">Реквизиты</a>
+        <a href="/privacy/" data-content-key="global.footer.privacy">Политика обработки персональных данных</a>
+        <a href="/personal-data-consent/" data-content-key="global.footer.personal_data_consent">Согласие на обработку персональных данных</a>
+        <a href="/marketing-consent/" data-content-key="global.footer.marketing_consent">Согласие на рекламно-информационные материалы</a>
+        <a href="/requisites/" data-content-key="global.footer.requisites">Реквизиты</a>
       </div>
     </div>
   </footer>
