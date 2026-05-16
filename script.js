@@ -62,15 +62,6 @@ function withTimeout(promise, timeoutMs, message) {
   ]);
 }
 
-function getPageKind() {
-  const path = window.location.pathname;
-  const legalPaths = ['/privacy/', '/personal-data-consent/', '/marketing-consent/', '/terms/', '/requisites/'];
-  if (path === '/' || path === '/index.html') return 'home';
-  if (legalPaths.includes(path)) return 'legal';
-  if (path === '/contacts/' || path === '/contacts') return 'contacts';
-  return 'default';
-}
-
 function reachGoal(goalName, params = {}) {
   if (typeof window.sendMetricGoal === 'function') window.sendMetricGoal(goalName, params);
 }
@@ -99,18 +90,6 @@ function initProjectFilters() {
       });
       reachGoal('project_filter_click', { filter });
     });
-  });
-}
-
-function injectFinalCta() {
-  const kind = getPageKind();
-  if (kind === 'home' || kind === 'legal' || kind === 'contacts') return;
-  document.querySelectorAll('main').forEach((main) => {
-    if (main.querySelector('.site-final-cta')) return;
-    const finalCta = document.createElement('section');
-    finalCta.className = 'site-final-cta';
-    finalCta.innerHTML = `<div class="container final-cta-inner"><div><p class="final-cta-kicker">Следующий шаг</p><h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2><p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p></div><div class="final-cta-actions"><a href="/contacts/">Оставить заявку</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="tel:+79137998808">Позвонить</a></div></div>`;
-    main.appendChild(finalCta);
   });
 }
 
@@ -193,7 +172,6 @@ async function saveLeadToSupabase(payload) {
 loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
-injectFinalCta();
 injectFormConsents();
 initCookieBanner();
 
