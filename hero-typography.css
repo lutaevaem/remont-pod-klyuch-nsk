@@ -4,6 +4,10 @@ body{
   line-height:1.55!important;
 }
 
+.home-page .site-final-cta{
+  display:none!important;
+}
+
 .hero{
   min-height:auto!important;
   padding:84px 0 72px!important;
