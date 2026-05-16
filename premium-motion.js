@@ -10,6 +10,7 @@
       '.section > .container',
       '.section-head',
       '.difference-grid article',
+      '.flip-card',
       '.project-card',
       '.service-card',
       '.service-intro article',
@@ -37,6 +38,7 @@
     ];
 
     const cardSelectors = [
+      '.flip-card',
       '.project-card',
       '.service-card',
       '.service-intro article',
@@ -58,6 +60,8 @@
     ];
 
     const staggerGrids = [
+      '.hero-proof',
+      '.service-proof-strip',
       '.project-grid-premium',
       '.services-grid',
       '.difference-grid',
@@ -80,7 +84,7 @@
     function applyRevealToNode(node) {
       if (!(node instanceof HTMLElement)) return;
       if (node.dataset.reveal) return;
-      if (node.closest('.hero')) return;
+      if (node.closest('.hero') && !node.matches('.flip-card')) return;
       if (!matchesAny(node, revealSelectors)) return;
       node.dataset.reveal = matchesAny(node, cardSelectors) ? 'card' : 'soft';
     }
