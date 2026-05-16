@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function guessFieldType(node, value) {
     const tag = node.tagName.toLowerCase();
-    if (value.length > 80) return 'textarea';
+    if (tag === 'textarea' || value.length > 80) return 'textarea';
     if (['p', 'h1', 'h2', 'h3', 'div'].includes(tag) && value.length > 45) return 'textarea';
     return 'text';
   }
@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/note/g, 'акцент')
       .replace(/kicker/g, 'надзаголовок')
       .replace(/button/g, 'кнопка')
+      .replace(/placeholder/g, 'placeholder')
       .replace(/details/g, 'подробности')
       .replace(/label/g, 'метка')
       .replace(/signature/g, 'подпись')
@@ -91,6 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
             field_type: guessFieldType(node, value),
             value,
             sort_order: index * 10 + 10,
+            is_active: true,
+          });
+        });
+        doc.querySelectorAll('[data-placeholder-key]').forEach((node, index) => {
+          const contentKey = node.dataset.placeholderKey;
+          const value = normalizeText(node.getAttribute('placeholder'));
+          if (!contentKey || !value) return;
+          fields.push({
+            page: contentKey.split('.')[0] || pageInfo.page,
+            content_key: contentKey,
+            label: makeLabel(pageInfo, contentKey, node),
+            field_type: 'textarea',
+            value,
+            sort_order: 9000 + index * 10,
             is_active: true,
           });
         });
