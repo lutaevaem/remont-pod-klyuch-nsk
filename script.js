@@ -5,15 +5,6 @@ function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
 
-function appendScript(src, dataName, defer = true) {
-  if (hasScriptBySrc(src)) return;
-  const script = document.createElement('script');
-  script.src = src;
-  script.defer = defer;
-  if (dataName) script.dataset[dataName] = 'true';
-  document.head.appendChild(script);
-}
-
 function loadMetrika() {
   if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
@@ -111,32 +102,6 @@ function initProjectFilters() {
   });
 }
 
-function injectFooterStructure() {
-  document.querySelectorAll('.footer-grid').forEach((footer) => {
-    if (footer.querySelector('.footer-contact-links')) return;
-    const currentTopLink = footer.querySelector(':scope > a');
-    const contacts = document.createElement('div');
-    contacts.className = 'footer-contact-links';
-    contacts.innerHTML = `<a href="tel:+79137998808">+7 (913) 799-88-08</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a><a href="mailto:i@usoltsev-top.ru">i@usoltsev-top.ru</a>`;
-    const siteLinks = document.createElement('div');
-    siteLinks.className = 'footer-site-links';
-    siteLinks.innerHTML = `<a href="/projects/">Проекты</a><a href="/services/remont-pod-klyuch/">Ремонт под ключ</a><a href="/services/stroitelstvo-pod-klyuch/">Строительство</a><a href="/services/komplektatsiya-obekta/">Комплектация</a><a href="/contacts/">Контакты</a>`;
-    if (currentTopLink) currentTopLink.replaceWith(contacts);
-    else footer.appendChild(contacts);
-    footer.appendChild(siteLinks);
-  });
-}
-
-function injectLegalFooterLinks() {
-  document.querySelectorAll('.footer-grid').forEach((footer) => {
-    if (footer.querySelector('.legal-footer-links')) return;
-    const links = document.createElement('div');
-    links.className = 'legal-footer-links';
-    links.innerHTML = `<a href="/privacy/">Политика обработки персональных данных</a><a href="/personal-data-consent/">Согласие на обработку персональных данных</a><a href="/marketing-consent/">Согласие на рекламно-информационные материалы</a><a href="/terms/">Пользовательское соглашение</a><a href="/requisites/">Реквизиты</a>`;
-    footer.appendChild(links);
-  });
-}
-
 function injectFinalCta() {
   const kind = getPageKind();
   if (kind === 'home' || kind === 'legal' || kind === 'contacts') return;
@@ -228,8 +193,6 @@ async function saveLeadToSupabase(payload) {
 loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
-injectFooterStructure();
-injectLegalFooterLinks();
 injectFinalCta();
 injectFormConsents();
 initCookieBanner();
