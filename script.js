@@ -10,8 +10,10 @@ function injectCriticalHeroTypography() {
     .hero h1{font-size:clamp(34px,3.1vw,48px)!important;line-height:1.14!important;letter-spacing:-.035em!important;max-width:820px!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;}
     .hero-lead{font-size:clamp(16px,1.12vw,18px)!important;line-height:1.58!important;max-width:720px!important;margin-top:22px!important;}
     .hero-note{font-size:clamp(15px,1vw,17px)!important;line-height:1.52!important;max-width:720px!important;}
+    .lead-form .form-note,#form-status{font-size:12px!important;line-height:1.45!important;margin-top:10px!important;color:rgba(255,250,242,.58)!important;letter-spacing:0!important;font-weight:500!important;max-width:100%!important;}
+    .lead-form #form-status{display:block!important;}
     @media(max-width:980px){.hero{padding:62px 0 58px!important}.hero h1{font-size:clamp(30px,5vw,40px)!important;line-height:1.15!important;max-width:720px!important}}
-    @media(max-width:640px){.hero{padding:48px 0 44px!important}.hero h1{font-size:clamp(25px,7.2vw,30px)!important;line-height:1.18!important;letter-spacing:-.026em!important;max-width:100%!important}.hero-lead{font-size:15px!important;line-height:1.58!important;margin-top:18px!important}.hero-note{font-size:14px!important;line-height:1.5!important}.hero-actions{margin-top:24px!important}}
+    @media(max-width:640px){.hero{padding:48px 0 44px!important}.hero h1{font-size:clamp(25px,7.2vw,30px)!important;line-height:1.18!important;letter-spacing:-.026em!important;max-width:100%!important}.hero-lead{font-size:15px!important;line-height:1.58!important;margin-top:18px!important}.hero-note{font-size:14px!important;line-height:1.5!important}.hero-actions{margin-top:24px!important}.lead-form .form-note,#form-status{font-size:11px!important;line-height:1.45!important;margin-top:9px!important;}}
     @media(max-width:390px){.hero h1{font-size:24px!important}}
   `;
   document.head.appendChild(style);
@@ -174,14 +176,12 @@ function injectLegalFooterLinks() {
 
 function injectFinalCta() {
   const kind = getPageKind();
-  if (kind === 'legal') return;
+  if (kind === 'legal' || kind === 'contacts') return;
   document.querySelectorAll('main').forEach((main) => {
     if (main.querySelector('.site-final-cta')) return;
     const finalCta = document.createElement('section');
-    finalCta.className = kind === 'contacts' ? 'site-final-cta contacts-final-cta' : 'site-final-cta';
-    finalCta.innerHTML = kind === 'contacts'
-      ? `<div class="container final-cta-inner"><div><p class="final-cta-kicker">Быстрый контакт</p><h2 class="final-cta-title">Можно начать с короткого сообщения</h2><p class="final-cta-text">Отправьте фото или видео объекта, площадь, район и желаемый результат. Этого достаточно, чтобы понять стартовую точку и предложить следующий шаг.</p></div><div class="final-cta-actions"><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Написать в Telegram</a><a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a><a href="tel:+79137998808">Позвонить</a></div></div>`
-      : `<div class="container final-cta-inner"><div><p class="final-cta-kicker">Следующий шаг</p><h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2><p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p></div><div class="final-cta-actions"><a href="/contacts/">Оставить заявку</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="tel:+79137998808">Позвонить</a></div></div>`;
+    finalCta.className = 'site-final-cta';
+    finalCta.innerHTML = `<div class="container final-cta-inner"><div><p class="final-cta-kicker">Следующий шаг</p><h2 class="final-cta-title">Расскажите об объекте — подскажем, как довести его до готового пространства</h2><p class="final-cta-text">Можно кратко: что есть сейчас, площадь, район, желаемый результат и сроки. Ответим, какой формат подойдёт: строительство, ремонт, комплектация или полный цикл.</p></div><div class="final-cta-actions"><a href="/contacts/">Оставить заявку</a><a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a><a href="tel:+79137998808">Позвонить</a></div></div>`;
     main.appendChild(finalCta);
   });
 }
