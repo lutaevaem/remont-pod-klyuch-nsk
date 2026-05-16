@@ -190,8 +190,13 @@ async function initSiteContent() {
   }
 
   function setBackground(node, imageUrl) {
+    const isPortraitImage = node.matches('.portrait-placeholder, .about-photo, .founder-photo');
+    const backgroundImage = isPortraitImage
+      ? `url('${imageUrl}')`
+      : `linear-gradient(90deg, rgba(17,15,12,.18), rgba(17,15,12,.42)), url('${imageUrl}')`;
+
     node.classList.add('has-image');
-    node.style.backgroundImage = `linear-gradient(90deg, rgba(17,15,12,.18), rgba(17,15,12,.42)), url('${imageUrl}')`;
+    node.style.backgroundImage = backgroundImage;
     node.style.backgroundSize = 'cover';
     node.style.backgroundPosition = 'center';
   }
