@@ -5,13 +5,6 @@ function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
 
-function removeObsoleteTermsLinks() {
-  document.querySelectorAll('a[href="/terms/"], a[href$="/terms/"], a[href*="/terms/"]').forEach((link) => {
-    const item = link.closest('li') || link;
-    item.remove();
-  });
-}
-
 function loadMetrika() {
   if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
@@ -176,18 +169,11 @@ async function saveLeadToSupabase(payload) {
   }
 }
 
-removeObsoleteTermsLinks();
 loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
 injectFormConsents();
 initCookieBanner();
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', removeObsoleteTermsLinks);
-} else {
-  removeObsoleteTermsLinks();
-}
 
 if (form) {
   form.addEventListener('submit', async (event) => {
