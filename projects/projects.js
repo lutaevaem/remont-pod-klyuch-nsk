@@ -22,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return String(value || '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
   }
 
+  function compactText(value, limit = 260) {
+    const text = String(value || '').replace(/\s+/g, ' ').trim();
+    if (text.length <= limit) return text;
+    return `${text.slice(0, limit).replace(/\s+\S*$/, '')}...`;
+  }
+
   function normalizeImages(images) {
     if (!images) return { cover: null, before: null, concept: null, process: null, after: null, extra: [] };
     if (Array.isArray(images)) {
@@ -61,11 +67,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style');
     style.id = 'featured-project-carousel-styles';
     style.textContent = `
-      #dynamic-featured-project .local-case-card { margin-top: 24px !important; margin-bottom: 26px !important; }
+      #dynamic-featured-project .local-case-card {
+        margin-top: 18px !important;
+        margin-bottom: 22px !important;
+      }
+      #dynamic-featured-project .dynamic-featured-case {
+        gap: 22px;
+        align-items: stretch;
+      }
+      #dynamic-featured-project .dynamic-featured-case .project-info {
+        padding: 28px;
+      }
+      #dynamic-featured-project .dynamic-featured-case .project-info h3 {
+        margin-bottom: 12px;
+        font-size: clamp(24px, 2.2vw, 34px);
+        line-height: 1.12;
+      }
+      #dynamic-featured-project .dynamic-featured-case .project-info p:not(.eyebrow) {
+        margin: 0 0 18px;
+        color: #5a5148;
+        font-size: 15px;
+        line-height: 1.56;
+      }
+      #dynamic-featured-project .dynamic-featured-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 14px;
+      }
+      #dynamic-featured-project .dynamic-featured-meta span {
+        display: inline-flex;
+        min-height: 30px;
+        align-items: center;
+        padding: 0 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(202,161,90,.24);
+        background: #fffaf2;
+        color: #7b5a27;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
       .featured-project-carousel {
         position: relative;
-        min-height: 420px;
-        border-radius: 30px;
+        min-height: 310px;
+        border-radius: 24px;
         overflow: hidden;
         background: #15130f;
       }
@@ -87,37 +133,37 @@ document.addEventListener('DOMContentLoaded', () => {
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(0deg, rgba(0,0,0,.48), transparent 64%);
+        background: linear-gradient(0deg, rgba(0,0,0,.42), transparent 66%);
         pointer-events: none;
       }
       .featured-project-carousel__label {
         position: absolute;
-        left: 20px;
-        bottom: 20px;
+        left: 16px;
+        bottom: 16px;
         z-index: 2;
         display: inline-flex;
-        min-height: 42px;
+        min-height: 36px;
         align-items: center;
-        padding: 0 16px;
+        padding: 0 13px;
         border-radius: 999px;
         border: 1px solid rgba(224,187,114,.34);
         background: rgba(14,12,9,.72);
         color: #f7f1e8;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 800;
         backdrop-filter: blur(12px);
       }
       .featured-project-carousel__thumbs {
         position: absolute;
-        right: 18px;
-        bottom: 18px;
+        right: 16px;
+        bottom: 16px;
         z-index: 2;
         display: flex;
-        gap: 8px;
+        gap: 7px;
       }
       .featured-project-carousel__thumbs span {
-        width: 34px;
-        height: 5px;
+        width: 28px;
+        height: 4px;
         border-radius: 999px;
         background: rgba(255,250,242,.55);
         box-shadow: 0 0 0 1px rgba(224,187,114,.22);
@@ -131,7 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .featured-project-carousel__slide:not(:first-child) { display: none; }
       }
       @media (max-width: 640px) {
-        .featured-project-carousel { min-height: 300px; border-radius: 24px; }
+        #dynamic-featured-project .dynamic-featured-case .project-info { padding: 24px; }
+        .featured-project-carousel { min-height: 250px; border-radius: 22px; }
         .featured-project-carousel__thumbs { display: none; }
       }
     `;
@@ -163,14 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="project-info">
           <p class="eyebrow">Главный кейс</p>
           <h3>${escapeHtml(project.title)}</h3>
-          <dl>
-            <dt>Стартовая точка</dt>
-            <dd>${escapeHtml(project.start_point || '')}</dd>
-            <dt>Что взяли на себя</dt>
-            <dd>${escapeHtml(project.scope || project.client_task || '')}</dd>
-            <dt>Результат</dt>
-            <dd>${escapeHtml(project.result || '')}</dd>
-          </dl>
+          <div class="dynamic-featured-meta">
+            <span>${escapeHtml(categoryLabel(project.category))}</span>
+            ${project.location ? `<span>${escapeHtml(project.location)}</span>` : ''}
+            <span>${galleryImages.length} фото</span>
+          </div>
+          <p>${escapeHtml(compactText(project.result || project.client_task || project.scope))}</p>
           <a class="btn btn-primary" href="${escapeHtml(projectUrl)}">Смотреть полный кейс</a>
         </div>
       </div>
