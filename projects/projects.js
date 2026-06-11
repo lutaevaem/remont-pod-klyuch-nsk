@@ -67,119 +67,237 @@ document.addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style');
     style.id = 'featured-project-carousel-styles';
     style.textContent = `
-      #dynamic-featured-project .local-case-card {
-        margin-top: 18px !important;
-        margin-bottom: 22px !important;
-      }
       #dynamic-featured-project .dynamic-featured-case {
-        gap: 22px;
-        align-items: stretch;
-      }
-      #dynamic-featured-project .dynamic-featured-case .project-info {
-        padding: 28px;
-      }
-      #dynamic-featured-project .dynamic-featured-case .project-info h3 {
-        margin-bottom: 12px;
-        font-size: clamp(24px, 2.2vw, 34px);
-        line-height: 1.12;
-      }
-      #dynamic-featured-project .dynamic-featured-case .project-info p:not(.eyebrow) {
-        margin: 0 0 18px;
-        color: #5a5148;
-        font-size: 15px;
-        line-height: 1.56;
-      }
-      #dynamic-featured-project .dynamic-featured-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 0 0 14px;
-      }
-      #dynamic-featured-project .dynamic-featured-meta span {
-        display: inline-flex;
-        min-height: 30px;
-        align-items: center;
-        padding: 0 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(202,161,90,.24);
-        background: #fffaf2;
-        color: #7b5a27;
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-      }
-      .featured-project-carousel {
         position: relative;
-        min-height: 310px;
-        border-radius: 24px;
         overflow: hidden;
-        background: #15130f;
+        margin-top: 18px !important;
+        margin-bottom: 30px !important;
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(360px, .78fr);
+        gap: 30px;
+        align-items: stretch;
+        padding: 30px;
+        border-radius: 38px;
+        border: 1px solid rgba(202,161,90,.30);
+        background:
+          radial-gradient(circle at 18% 8%, rgba(224,187,114,.14), transparent 32%),
+          linear-gradient(135deg, #15130f 0%, #211b14 58%, #10100e 100%);
+        color: #f7f3ea;
+        box-shadow: 0 30px 90px rgba(17,16,14,.28);
       }
-      .featured-project-carousel__slide {
+      #dynamic-featured-project .dynamic-featured-case::before {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: 37px;
+        pointer-events: none;
+        background: linear-gradient(135deg, rgba(255,255,255,.08), transparent 40%, rgba(224,187,114,.08));
+        opacity: .72;
+      }
+      #dynamic-featured-project .dynamic-featured-media,
+      #dynamic-featured-project .dynamic-featured-content {
+        position: relative;
+        z-index: 1;
+      }
+      #dynamic-featured-project .dynamic-featured-media {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 108px;
+        gap: 12px;
+        min-height: 430px;
+      }
+      #dynamic-featured-project .featured-project-carousel {
+        position: relative;
+        min-height: 430px;
+        border-radius: 28px;
+        overflow: hidden;
+        background: #0f0d0a;
+        box-shadow: inset 0 0 0 1px rgba(224,187,114,.18), 0 24px 54px rgba(0,0,0,.34);
+      }
+      #dynamic-featured-project .featured-project-carousel__slide {
         position: absolute;
         inset: 0;
         opacity: 0;
         animation: featuredProjectFade calc(var(--slide-count, 5) * 4s) infinite;
         animation-delay: calc(var(--slide-index, 0) * 4s);
       }
-      .featured-project-carousel__slide:first-child { opacity: 1; }
-      .featured-project-carousel__slide img {
+      #dynamic-featured-project .featured-project-carousel__slide:first-child { opacity: 1; }
+      #dynamic-featured-project .featured-project-carousel__slide img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transform: scale(1.02);
+        transform: scale(1.015);
       }
-      .featured-project-carousel::after {
+      #dynamic-featured-project .featured-project-carousel::after {
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(0deg, rgba(0,0,0,.42), transparent 66%);
+        background: linear-gradient(0deg, rgba(0,0,0,.52), transparent 58%);
         pointer-events: none;
       }
-      .featured-project-carousel__label {
+      #dynamic-featured-project .featured-project-carousel__label {
         position: absolute;
-        left: 16px;
-        bottom: 16px;
+        left: 18px;
+        bottom: 18px;
         z-index: 2;
         display: inline-flex;
-        min-height: 36px;
+        min-height: 38px;
         align-items: center;
-        padding: 0 13px;
+        padding: 0 14px;
         border-radius: 999px;
-        border: 1px solid rgba(224,187,114,.34);
+        border: 1px solid rgba(224,187,114,.36);
         background: rgba(14,12,9,.72);
         color: #f7f1e8;
         font-size: 11px;
-        font-weight: 800;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .07em;
         backdrop-filter: blur(12px);
       }
-      .featured-project-carousel__thumbs {
-        position: absolute;
-        right: 16px;
-        bottom: 16px;
-        z-index: 2;
-        display: flex;
-        gap: 7px;
+      #dynamic-featured-project .featured-project-thumbs {
+        display: grid;
+        gap: 10px;
       }
-      .featured-project-carousel__thumbs span {
-        width: 28px;
-        height: 4px;
+      #dynamic-featured-project .featured-project-thumb {
+        position: relative;
+        display: block;
+        min-height: 0;
+        height: 78px;
+        overflow: hidden;
+        border-radius: 18px;
+        border: 1px solid rgba(224,187,114,.26);
+        background: rgba(255,255,255,.06);
+        box-shadow: 0 12px 26px rgba(0,0,0,.18);
+      }
+      #dynamic-featured-project .featured-project-thumb:first-child {
+        height: 112px;
+        border-color: rgba(224,187,114,.54);
+      }
+      #dynamic-featured-project .featured-project-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        opacity: .88;
+        transition: transform .25s ease, opacity .25s ease;
+      }
+      #dynamic-featured-project .featured-project-thumb:hover img {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+      #dynamic-featured-project .dynamic-featured-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 24px 24px 24px 8px;
+      }
+      #dynamic-featured-project .dynamic-featured-content .eyebrow {
+        width: max-content;
+        max-width: 100%;
+        margin-bottom: 16px;
+        padding: 7px 12px;
         border-radius: 999px;
-        background: rgba(255,250,242,.55);
-        box-shadow: 0 0 0 1px rgba(224,187,114,.22);
+        background: rgba(224,187,114,.10);
+        border: 1px solid rgba(224,187,114,.22);
+        color: #e0bb72;
+      }
+      #dynamic-featured-project .dynamic-featured-content h3 {
+        margin: 0 0 16px;
+        font-size: clamp(32px, 3.1vw, 50px);
+        line-height: .98;
+        letter-spacing: -.055em;
+        color: #fffaf2;
+      }
+      #dynamic-featured-project .dynamic-featured-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 18px;
+      }
+      #dynamic-featured-project .dynamic-featured-meta span {
+        display: inline-flex;
+        min-height: 32px;
+        align-items: center;
+        padding: 0 11px;
+        border-radius: 999px;
+        border: 1px solid rgba(224,187,114,.26);
+        background: rgba(255,255,255,.055);
+        color: #ead2a2;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+      }
+      #dynamic-featured-project .dynamic-featured-content p:not(.eyebrow) {
+        margin: 0 0 26px;
+        color: #d5cbbd;
+        font-size: 17px;
+        line-height: 1.62;
+        max-width: 560px;
+      }
+      #dynamic-featured-project .dynamic-featured-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+      #dynamic-featured-project .dynamic-featured-actions .btn-secondary {
+        min-height: 54px;
+        border-color: rgba(224,187,114,.28);
+        color: #f7f1e8;
+        background: rgba(255,255,255,.045);
       }
       @keyframes featuredProjectFade {
         0%, 18% { opacity: 1; }
         24%, 100% { opacity: 0; }
       }
       @media (prefers-reduced-motion: reduce) {
-        .featured-project-carousel__slide { animation: none; }
-        .featured-project-carousel__slide:not(:first-child) { display: none; }
+        #dynamic-featured-project .featured-project-carousel__slide { animation: none; }
+        #dynamic-featured-project .featured-project-carousel__slide:not(:first-child) { display: none; }
+      }
+      @media (max-width: 980px) {
+        #dynamic-featured-project .dynamic-featured-case {
+          grid-template-columns: 1fr;
+          padding: 22px;
+          gap: 20px;
+        }
+        #dynamic-featured-project .dynamic-featured-content { padding: 4px 2px 4px; }
       }
       @media (max-width: 640px) {
-        #dynamic-featured-project .dynamic-featured-case .project-info { padding: 24px; }
-        .featured-project-carousel { min-height: 250px; border-radius: 22px; }
-        .featured-project-carousel__thumbs { display: none; }
+        #dynamic-featured-project .dynamic-featured-case {
+          width: min(100% - 28px, 1180px);
+          border-radius: 30px;
+          padding: 16px;
+        }
+        #dynamic-featured-project .dynamic-featured-case::before { border-radius: 29px; }
+        #dynamic-featured-project .dynamic-featured-media {
+          grid-template-columns: 1fr;
+          min-height: 0;
+        }
+        #dynamic-featured-project .featured-project-carousel {
+          min-height: 300px;
+          border-radius: 24px;
+        }
+        #dynamic-featured-project .featured-project-thumbs {
+          grid-template-columns: repeat(5, 1fr);
+          gap: 7px;
+        }
+        #dynamic-featured-project .featured-project-thumb,
+        #dynamic-featured-project .featured-project-thumb:first-child {
+          height: 56px;
+          border-radius: 14px;
+        }
+        #dynamic-featured-project .dynamic-featured-content h3 {
+          font-size: 30px;
+          line-height: 1.03;
+        }
+        #dynamic-featured-project .dynamic-featured-content p:not(.eyebrow) {
+          font-size: 15px;
+          line-height: 1.58;
+        }
+        #dynamic-featured-project .dynamic-featured-actions .btn,
+        #dynamic-featured-project .dynamic-featured-actions .btn-secondary {
+          width: 100%;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -198,16 +316,22 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="${escapeHtml(image)}" alt="${escapeHtml(project.title)}">
       </a>
     `).join('');
-    const thumbs = galleryImages.map(() => '<span></span>').join('');
+    const thumbs = galleryImages.map((image, index) => `
+      <a class="featured-project-thumb" href="${escapeHtml(projectUrl)}" aria-label="Открыть фото ${index + 1} проекта ${escapeHtml(project.title)}">
+        <img src="${escapeHtml(image)}" alt="${escapeHtml(project.title)} — фото ${index + 1}">
+      </a>
+    `).join('');
 
     featuredContainer.innerHTML = `
-      <div class="container featured-project project-item local-case-card dynamic-featured-case" data-category="${escapeHtml(categoryToFilter(project.category))}">
-        <div class="project-gallery editorial-gallery featured-project-carousel">
-          ${slides || `<a class="featured-project-carousel__slide" href="${escapeHtml(projectUrl)}" style="--slide-index:0;--slide-count:1;"></a>`}
-          <span class="featured-project-carousel__label">${escapeHtml(categoryLabel(project.category))}</span>
-          ${thumbs ? `<div class="featured-project-carousel__thumbs" aria-hidden="true">${thumbs}</div>` : ''}
+      <div class="container dynamic-featured-case project-item" data-category="${escapeHtml(categoryToFilter(project.category))}">
+        <div class="dynamic-featured-media">
+          <div class="featured-project-carousel">
+            ${slides || `<a class="featured-project-carousel__slide" href="${escapeHtml(projectUrl)}" style="--slide-index:0;--slide-count:1;"></a>`}
+            <span class="featured-project-carousel__label">${escapeHtml(categoryLabel(project.category))}</span>
+          </div>
+          ${thumbs ? `<div class="featured-project-thumbs" aria-label="Миниатюры главного кейса">${thumbs}</div>` : ''}
         </div>
-        <div class="project-info">
+        <div class="dynamic-featured-content">
           <p class="eyebrow">Главный кейс</p>
           <h3>${escapeHtml(project.title)}</h3>
           <div class="dynamic-featured-meta">
@@ -216,7 +340,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>${galleryImages.length} фото</span>
           </div>
           <p>${escapeHtml(compactText(project.result || project.client_task || project.scope))}</p>
-          <a class="btn btn-primary" href="${escapeHtml(projectUrl)}">Смотреть полный кейс</a>
+          <div class="dynamic-featured-actions">
+            <a class="btn btn-primary" href="${escapeHtml(projectUrl)}">Смотреть полный кейс</a>
+            <a class="btn btn-secondary" href="/contacts/">Обсудить похожий объект</a>
+          </div>
         </div>
       </div>
     `;
