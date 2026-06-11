@@ -1,4 +1,6 @@
 (() => {
+  let globalCloseBound = false;
+
   function createLightbox() {
     let lightbox = document.querySelector('.case-lightbox');
     if (lightbox) return lightbox;
@@ -50,17 +52,24 @@
     }
 
     cards.forEach((card) => {
+      if (card.dataset.lightboxReady === 'true') return;
+      card.dataset.lightboxReady = 'true';
       card.addEventListener('click', () => open(card));
     });
 
-    close.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (event) => {
-      if (event.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
-    });
+    if (!globalCloseBound) {
+      globalCloseBound = true;
+      close.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+      });
+    }
   }
+
+  window.initCaseGallery = initCaseGallery;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCaseGallery, { once: true });
