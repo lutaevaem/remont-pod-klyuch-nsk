@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return images.cover || images.after || images.before || images.concept || images.process || images.extra[0];
   }
 
+  function getProjectUrl(project) {
+    return `/projects/project/?slug=${encodeURIComponent(project.slug || project.id)}`;
+  }
+
   function getDescription(project) {
     return project.result || project.client_task || project.scope || 'Проект добавлен в портфолио. Описание можно дополнить в админке.';
   }
@@ -47,18 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!projectContainer) return;
     projectContainer.innerHTML = projects.map((project) => {
       const preview = getPreviewImage(project);
+      const projectUrl = getProjectUrl(project);
       return `
         <article class="project-card project-item unified-project-card" data-category="${escapeHtml(categoryToFilter(project.category))}">
-          ${preview ? `<div class="project-photo has-image"><img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}"><span>${escapeHtml(categoryLabel(project.category))}</span></div>` : `<div class="project-photo"><span>${escapeHtml(categoryLabel(project.category))}</span></div>`}
+          ${preview ? `<a class="project-photo has-image" href="${escapeHtml(projectUrl)}"><img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}"><span>${escapeHtml(categoryLabel(project.category))}</span></a>` : `<a class="project-photo" href="${escapeHtml(projectUrl)}"><span>${escapeHtml(categoryLabel(project.category))}</span></a>`}
           <div class="project-card-body">
             <div class="project-card-meta">
               <span>${escapeHtml(categoryLabel(project.category))}</span>
               ${project.area ? `<span>${escapeHtml(project.area)}</span>` : ''}
               ${project.location ? `<span>${escapeHtml(project.location)}</span>` : ''}
             </div>
-            <h3>${escapeHtml(project.title)}</h3>
+            <h3><a href="${escapeHtml(projectUrl)}">${escapeHtml(project.title)}</a></h3>
             <p>${escapeHtml(getDescription(project))}</p>
-            <a href="/contacts/">Обсудить похожий проект</a>
+            <a href="${escapeHtml(projectUrl)}">Смотреть кейс</a>
           </div>
         </article>
       `;
