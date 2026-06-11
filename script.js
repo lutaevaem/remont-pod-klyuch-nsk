@@ -5,6 +5,15 @@ function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
 
+function loadFavicon() {
+  if (document.querySelector('script[data-site-favicon]') || hasScriptBySrc('/site-favicon.js')) return;
+  const script = document.createElement('script');
+  script.src = '/site-favicon.js';
+  script.defer = true;
+  script.dataset.siteFavicon = 'true';
+  document.head.appendChild(script);
+}
+
 function loadMetrika() {
   if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
@@ -157,6 +166,7 @@ async function saveLeadToSupabase(payload) {
   }
 }
 
+loadFavicon();
 loadSupabasePublic();
 loadMetrika();
 initProjectFilters();
