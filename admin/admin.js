@@ -2,11 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusNode = document.querySelector('#admin-status');
   const projectForm = document.querySelector('#project-form');
   const projectList = document.querySelector('#project-list');
+  const casePageList = document.querySelector('#case-page-list');
   const resetButton = document.querySelector('#reset-project-form');
   const refreshButton = document.querySelector('#refresh-projects');
+  const refreshCasePagesButton = document.querySelector('#refresh-case-pages');
   const formTitle = document.querySelector('#project-form-title');
   const settingsUrl = document.querySelector('#settings-url');
   const existingImagesNode = document.querySelector('#existing-images');
+  const casePagePreview = document.querySelector('#case-page-preview');
   let projectsCache = [];
   let supabaseClient = null;
   let currentProject = null;
@@ -41,9 +44,48 @@ document.addEventListener('DOMContentLoaded', () => {
     return String(text || '')
       .toLowerCase()
       .replace(/ё/g, 'e')
-      .replace(/[^a-zа-я0-9]+/gi, '-')
+      .replace(/ж/g, 'zh')
+      .replace(/ч/g, 'ch')
+      .replace(/ш/g, 'sh')
+      .replace(/щ/g, 'sch')
+      .replace(/ю/g, 'yu')
+      .replace(/я/g, 'ya')
+      .replace(/ц/g, 'ts')
+      .replace(/х/g, 'h')
+      .replace(/ы/g, 'y')
+      .replace(/э/g, 'e')
+      .replace(/а/g, 'a')
+      .replace(/б/g, 'b')
+      .replace(/в/g, 'v')
+      .replace(/г/g, 'g')
+      .replace(/д/g, 'd')
+      .replace(/е/g, 'e')
+      .replace(/з/g, 'z')
+      .replace(/и/g, 'i')
+      .replace(/й/g, 'y')
+      .replace(/к/g, 'k')
+      .replace(/л/g, 'l')
+      .replace(/м/g, 'm')
+      .replace(/н/g, 'n')
+      .replace(/о/g, 'o')
+      .replace(/п/g, 'p')
+      .replace(/р/g, 'r')
+      .replace(/с/g, 's')
+      .replace(/т/g, 't')
+      .replace(/у/g, 'u')
+      .replace(/ф/g, 'f')
+      .replace(/[ьъ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
       .slice(0, 80);
+  }
+
+  function getProjectSlug(project) {
+    return project?.slug || slugify(project?.title) || project?.id;
+  }
+
+  function getProjectUrl(project) {
+    return `/projects/project/?slug=${encodeURIComponent(getProjectSlug(project))}`;
   }
 
   function getCategoryLabel(category) {
@@ -118,6 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return images;
   }
 
+  function updateCasePagePreview(project = currentProject) {
+    if (!casePagePreview) return;
+    const title = project?.title || projectForm?.elements.title?.value || '';
+    const slug = projectForm?.elements.slug?.value || project?.slug || slugify(title);
+    const url = `/projects/project/?slug=${encodeURIComponent(slug || '')}`;
+    casePagePreview.innerHTML = slug
+      ? `<b>Страница кейса:</b> <a href="${escapeHtml(url)}" target="_blank">${escapeHtml(url)}</a><small>Этот адрес будет открываться из карточки проекта на сайте.</small>`
+      : '<b>Страница кейса:</b> появится после названия проекта.';
+  }
+
   function renderExistingImages(project) {
     if (!existingImagesNode) return;
     const images = normalizeImages(project?.images);
@@ -139,26 +191,30 @@ document.addEventListener('DOMContentLoaded', () => {
   function fillForm(project) {
     if (!projectForm || !formTitle) return;
     currentProject = project;
-    formTitle.textContent = 'Редактировать проект';
+    formTitle.textContent = 'Редактировать проект и страницу кейса';
     Object.entries(project).forEach(([key, value]) => {
       const field = projectForm.elements[key];
       if (!field) return;
       if (field.type === 'checkbox') field.checked = Boolean(value);
       else if (key !== 'images') field.value = value ?? '';
     });
+    if (projectForm.elements.slug) projectForm.elements.slug.value = getProjectSlug(project);
     renderExistingImages(project);
+    updateCasePagePreview(project);
+    setActiveView('projects');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function resetForm() {
     if (!projectForm || !formTitle) return;
     currentProject = null;
-    formTitle.textContent = 'Добавить проект';
+    formTitle.textContent = 'Добавить проект и страницу кейса';
     projectForm.reset();
     if (projectForm.elements.id) projectForm.elements.id.value = '';
     if (projectForm.elements.sort_order) projectForm.elements.sort_order.value = 100;
     if (projectForm.elements.is_published) projectForm.elements.is_published.checked = true;
     renderExistingImages(null);
+    updateCasePagePreview(null);
   }
 
   function renderProjects() {
@@ -169,23 +225,60 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    projectList.innerHTML = projectsCache.map((project) => `
-      <article class="project-admin-item">
-        <div class="project-admin-meta">
-          <span>${escapeHtml(getCategoryLabel(project.category))}</span>
-          ${project.area ? `<span>${escapeHtml(project.area)}</span>` : ''}
-          ${project.location ? `<span>${escapeHtml(project.location)}</span>` : ''}
-          <span>${project.is_published ? 'Опубликован' : 'Черновик'}</span>
-        </div>
-        <h3>${escapeHtml(project.title)}</h3>
-        <p>${escapeHtml(project.client_task || project.result || 'Описание пока не заполнено.')}</p>
-        <div class="project-admin-actions">
-          <button type="button" data-action="edit" data-id="${project.id}">Редактировать</button>
-          <button type="button" data-action="toggle" data-id="${project.id}">${project.is_published ? 'Снять с публикации' : 'Опубликовать'}</button>
-          <button type="button" class="danger" data-action="delete" data-id="${project.id}">Удалить</button>
-        </div>
-      </article>
-    `).join('');
+    projectList.innerHTML = projectsCache.map((project) => {
+      const url = getProjectUrl(project);
+      return `
+        <article class="project-admin-item">
+          <div class="project-admin-meta">
+            <span>${escapeHtml(getCategoryLabel(project.category))}</span>
+            ${project.area ? `<span>${escapeHtml(project.area)}</span>` : ''}
+            ${project.location ? `<span>${escapeHtml(project.location)}</span>` : ''}
+            <span>${project.is_published ? 'Опубликован' : 'Черновик'}</span>
+            <span>slug: ${escapeHtml(getProjectSlug(project))}</span>
+          </div>
+          <h3>${escapeHtml(project.title)}</h3>
+          <p>${escapeHtml(project.client_task || project.result || 'Описание пока не заполнено.')}</p>
+          <div class="case-link-preview"><b>Страница кейса:</b> <a href="${escapeHtml(url)}" target="_blank">${escapeHtml(url)}</a></div>
+          <div class="project-admin-actions">
+            <button type="button" data-action="edit" data-id="${project.id}">Редактировать</button>
+            <a href="${escapeHtml(url)}" target="_blank">Открыть страницу</a>
+            <button type="button" data-action="toggle" data-id="${project.id}">${project.is_published ? 'Снять с публикации' : 'Опубликовать'}</button>
+            <button type="button" class="danger" data-action="delete" data-id="${project.id}">Удалить</button>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  function renderCasePages() {
+    if (!casePageList) return;
+
+    if (!projectsCache.length) {
+      casePageList.innerHTML = '<p>Пока нет проектов. Когда вы добавите проект, здесь появится его страница кейса.</p>';
+      return;
+    }
+
+    casePageList.innerHTML = projectsCache.map((project) => {
+      const images = normalizeImages(project.images);
+      const imagesCount = [images.cover, images.before, images.concept, images.process, images.after, ...images.extra].filter(Boolean).length;
+      const url = getProjectUrl(project);
+      return `
+        <article class="project-admin-item case-admin-item">
+          <div class="project-admin-meta">
+            <span>${project.is_published ? 'Опубликована' : 'Черновик'}</span>
+            <span>${escapeHtml(getCategoryLabel(project.category))}</span>
+            <span>${imagesCount} фото</span>
+          </div>
+          <h3>${escapeHtml(project.title)}</h3>
+          <p>${escapeHtml(project.result || project.client_task || 'Заполните описание, фото и результат в форме проекта.')}</p>
+          <div class="case-link-preview"><b>Адрес страницы:</b> <a href="${escapeHtml(url)}" target="_blank">${escapeHtml(url)}</a></div>
+          <div class="project-admin-actions">
+            <button type="button" data-action="edit" data-id="${project.id}">Редактировать страницу</button>
+            <a href="${escapeHtml(url)}" target="_blank">Открыть на сайте</a>
+          </div>
+        </article>
+      `;
+    }).join('');
   }
 
   async function fetchProjects() {
@@ -201,13 +294,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (error) {
       setStatus(`Не удалось загрузить проекты. Проверь таблицу projects и политики доступа. Ошибка: ${error.message}`, 'error');
       if (projectList) projectList.innerHTML = '<p>Пока не удалось получить проекты из базы.</p>';
+      if (casePageList) casePageList.innerHTML = '<p>Пока не удалось получить страницы кейсов из базы.</p>';
       return;
     }
 
     projectsCache = data || [];
     renderProjects();
+    renderCasePages();
     hasLoadedProjects = true;
-    setStatus(`Подключение работает. Проектов в базе: ${projectsCache.length}.`, 'success');
+    setStatus(`Подключение работает. Проектов и страниц кейсов в базе: ${projectsCache.length}.`, 'success');
   }
 
   async function saveProject(event) {
@@ -216,9 +311,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(projectForm);
     const id = formData.get('id');
+    const title = formData.get('title');
+    const slug = slugify(formData.get('slug') || title);
 
     const payload = {
-      title: formData.get('title'),
+      title,
+      slug,
       category: formData.get('category'),
       area: formData.get('area') || null,
       location: formData.get('location') || null,
@@ -230,11 +328,10 @@ document.addEventListener('DOMContentLoaded', () => {
       review: formData.get('review') || null,
       sort_order: Number(formData.get('sort_order') || 100),
       is_published: formData.get('is_published') === 'on',
-      slug: slugify(formData.get('title')),
       updated_at: new Date().toISOString(),
     };
 
-    setStatus('Сохраняем проект...');
+    setStatus('Сохраняем проект и страницу кейса...');
 
     let saved;
     if (id) {
@@ -257,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     resetForm();
     await fetchProjects();
-    setStatus('Проект сохранён.', 'success');
+    setStatus('Проект и страница кейса сохранены.', 'success');
   }
 
   async function removePhoto(removeKey) {
@@ -271,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentProject.images = images;
     renderExistingImages(currentProject);
     await fetchProjects();
-    setStatus('Фото удалено из проекта.', 'success');
+    setStatus('Фото удалено из проекта и страницы кейса.', 'success');
   }
 
   async function handleProjectAction(event) {
@@ -304,11 +401,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (projectForm) projectForm.addEventListener('submit', saveProject);
+  if (projectForm) {
+    projectForm.addEventListener('submit', saveProject);
+    projectForm.elements.title?.addEventListener('input', () => {
+      if (!currentProject && projectForm.elements.slug) projectForm.elements.slug.value = slugify(projectForm.elements.title.value);
+      updateCasePagePreview();
+    });
+    projectForm.elements.slug?.addEventListener('input', () => {
+      projectForm.elements.slug.value = slugify(projectForm.elements.slug.value);
+      updateCasePagePreview();
+    });
+  }
   if (projectList) projectList.addEventListener('click', handleProjectAction);
+  if (casePageList) casePageList.addEventListener('click', handleProjectAction);
   if (existingImagesNode) existingImagesNode.addEventListener('click', handleProjectAction);
   if (resetButton) resetButton.addEventListener('click', resetForm);
   if (refreshButton) refreshButton.addEventListener('click', fetchProjects);
+  if (refreshCasePagesButton) refreshCasePagesButton.addEventListener('click', fetchProjects);
 
   function startProjects() {
     const isReady = initSupabase();
@@ -316,4 +425,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.addEventListener('admin:authenticated', startProjects);
+
+  setTimeout(() => {
+    if (!hasLoadedProjects && document.querySelector('#admin-app')?.hidden === false) startProjects();
+  }, 700);
+
+  resetForm();
 });
