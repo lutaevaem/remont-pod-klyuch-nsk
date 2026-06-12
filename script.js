@@ -14,6 +14,16 @@ function loadFavicon() {
   document.head.appendChild(script);
 }
 
+function loadHomeProjects() {
+  if (!document.querySelector('#projects-preview .project-grid-premium')) return;
+  if (document.querySelector('script[data-home-projects]') || hasScriptBySrc('/home-projects.js')) return;
+  const script = document.createElement('script');
+  script.src = '/home-projects.js';
+  script.defer = true;
+  script.dataset.homeProjects = 'true';
+  document.head.appendChild(script);
+}
+
 function loadMetrika() {
   if (document.querySelector('script[data-metrika-local]') || hasScriptBySrc('/metrika.js')) return;
   const script = document.createElement('script');
@@ -168,6 +178,7 @@ async function saveLeadToSupabase(payload) {
 
 loadFavicon();
 loadSupabasePublic();
+loadHomeProjects();
 loadMetrika();
 initProjectFilters();
 initCookieBanner();
