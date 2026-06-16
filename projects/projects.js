@@ -54,19 +54,118 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getProjectUrl(project) {
-    return `/projects/project/?slug=${encodeURIComponent(project.slug || project.id)}`;
+    if (project.slug) return `/projects/project/?slug=${encodeURIComponent(project.slug)}`;
+    return `/projects/project/?id=${encodeURIComponent(project.id)}`;
   }
 
   function getDescription(project) {
     return project.result || project.client_task || project.scope || 'Проект добавлен в портфолио. Описание можно дополнить в админке.';
   }
 
-  function injectFeaturedCarouselStyles() {
-    if (document.querySelector('#featured-project-carousel-styles')) return;
+  function injectProjectStyles() {
+    if (document.querySelector('#dynamic-project-styles')) return;
 
     const style = document.createElement('style');
-    style.id = 'featured-project-carousel-styles';
+    style.id = 'dynamic-project-styles';
     style.textContent = `
+      #dynamic-featured-project:empty,
+      #dynamic-projects:empty,
+      #static-featured-project[hidden],
+      #static-project-cards[hidden],
+      .local-case-card[hidden] {
+        display: none !important;
+      }
+      #dynamic-projects.dynamic-project-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        align-items: stretch;
+      }
+      #dynamic-projects .unified-project-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        background: #fffaf2;
+        border: 1px solid rgba(202,161,90,.22);
+      }
+      #dynamic-projects .unified-project-card .project-photo {
+        position: relative;
+        overflow: hidden;
+        display: block;
+        width: 100%;
+        height: 270px;
+        min-height: 270px;
+        padding: 0;
+        background: linear-gradient(135deg, #211b14, #c8b695);
+      }
+      #dynamic-projects .unified-project-card .project-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform .35s ease, filter .35s ease;
+      }
+      #dynamic-projects .unified-project-card:hover .project-photo img {
+        transform: scale(1.035);
+        filter: brightness(1.03);
+      }
+      #dynamic-projects .unified-project-card .project-photo span {
+        position: absolute;
+        left: 18px;
+        bottom: 18px;
+        display: inline-flex;
+        min-height: 36px;
+        align-items: center;
+        padding: 0 13px;
+        border-radius: 999px;
+        background: rgba(17,16,14,.76);
+        border: 1px solid rgba(224,187,114,.32);
+        color: #f7f1e8;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        backdrop-filter: blur(10px);
+      }
+      #dynamic-projects .project-card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 24px;
+      }
+      #dynamic-projects .project-card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 14px;
+      }
+      #dynamic-projects .project-card-meta span {
+        display: inline-flex;
+        min-height: 28px;
+        align-items: center;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: #f0e5d4;
+        color: #7a5526;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+      }
+      #dynamic-projects .unified-project-card h3 {
+        margin: 0 0 12px;
+        font-size: 24px;
+        line-height: 1.1;
+        letter-spacing: -.035em;
+      }
+      #dynamic-projects .unified-project-card p {
+        margin: 0 0 22px;
+        color: #625a50;
+        line-height: 1.55;
+      }
+      #dynamic-projects .unified-project-card .project-card-body > a {
+        margin: auto 0 0;
+        color: #9d7133;
+        font-weight: 900;
+      }
       #dynamic-featured-project .dynamic-featured-case {
         position: relative;
         overflow: hidden;
@@ -263,6 +362,10 @@ document.addEventListener('DOMContentLoaded', () => {
         #dynamic-featured-project .dynamic-featured-content { padding: 4px 2px 4px; }
       }
       @media (max-width: 640px) {
+        #dynamic-projects .unified-project-card .project-photo {
+          height: 230px;
+          min-height: 230px;
+        }
         #dynamic-featured-project .dynamic-featured-case {
           width: min(100% - 28px, 1180px);
           border-radius: 30px;
@@ -306,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderFeaturedProject(project) {
     if (!featuredContainer || !project) return;
 
-    injectFeaturedCarouselStyles();
+    injectProjectStyles();
 
     const projectUrl = getProjectUrl(project);
     const galleryImages = getProjectImages(project).slice(0, 5);
@@ -326,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="container dynamic-featured-case project-item" data-category="${escapeHtml(categoryToFilter(project.category))}">
         <div class="dynamic-featured-media">
           <div class="featured-project-carousel">
-            ${slides || `<a class="featured-project-carousel__slide" href="${escapeHtml(projectUrl)}" style="--slide-index:0;--slide-count:1;"></a>`}
+            ${slides || `<a class="featured-project-carousel__slide" href="${escapeHtml(projectUrl)}" style="--slide-index:0;--slide-count:1;"><span class="featured-project-carousel__label">${escapeHtml(categoryLabel(project.category))}</span></a>`}
             <span class="featured-project-carousel__label">${escapeHtml(categoryLabel(project.category))}</span>
           </div>
           ${thumbs ? `<div class="featured-project-thumbs" aria-label="Миниатюры главного кейса">${thumbs}</div>` : ''}
@@ -351,12 +454,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderProjectCards(projects) {
     if (!projectContainer) return;
+    injectProjectStyles();
+    projectContainer.classList.add('dynamic-project-grid');
     projectContainer.innerHTML = projects.map((project) => {
       const preview = getPreviewImage(project);
       const projectUrl = getProjectUrl(project);
       return `
         <article class="project-card project-item unified-project-card" data-category="${escapeHtml(categoryToFilter(project.category))}">
-          ${preview ? `<a class="project-photo has-image" href="${escapeHtml(projectUrl)}"><img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}"><span>${escapeHtml(categoryLabel(project.category))}</span></a>` : `<a class="project-photo" href="${escapeHtml(projectUrl)}"><span>${escapeHtml(categoryLabel(project.category))}</span></a>`}
+          <a class="project-photo${preview ? ' has-image' : ''}" href="${escapeHtml(projectUrl)}">
+            ${preview ? `<img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}" loading="lazy">` : ''}
+            <span>${escapeHtml(categoryLabel(project.category))}</span>
+          </a>
           <div class="project-card-body">
             <div class="project-card-meta">
               <span>${escapeHtml(categoryLabel(project.category))}</span>
@@ -364,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ${project.location ? `<span>${escapeHtml(project.location)}</span>` : ''}
             </div>
             <h3><a href="${escapeHtml(projectUrl)}">${escapeHtml(project.title)}</a></h3>
-            <p>${escapeHtml(getDescription(project))}</p>
+            <p>${escapeHtml(compactText(getDescription(project), 190))}</p>
             <a href="${escapeHtml(projectUrl)}">Смотреть кейс</a>
           </div>
         </article>
@@ -390,8 +498,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (error) throw error;
 
       if (!data || !data.length) {
-        if (staticFeatured) staticFeatured.hidden = false;
-        if (staticCards) staticCards.hidden = false;
+        if (featuredContainer) featuredContainer.innerHTML = '';
+        if (projectContainer) projectContainer.innerHTML = '<article class="project-card"><div class="project-card-body"><h3>Проекты скоро появятся</h3><p>Кейсы можно добавить и опубликовать в админке.</p><a href="/contacts/">Обсудить проект</a></div></article>';
+        if (staticFeatured) staticFeatured.hidden = true;
+        if (staticLocalFeatured) staticLocalFeatured.hidden = true;
+        if (staticCards) staticCards.hidden = true;
         return;
       }
 
@@ -407,8 +518,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (error) {
       console.error('Projects loading failed:', error);
-      if (staticFeatured) staticFeatured.hidden = false;
-      if (staticCards) staticCards.hidden = false;
+      if (featuredContainer) featuredContainer.innerHTML = '';
+      if (projectContainer) projectContainer.innerHTML = '<article class="project-card"><div class="project-card-body"><h3>Не удалось загрузить проекты</h3><p>Обновите страницу или проверьте подключение к базе.</p><a href="/contacts/">Связаться</a></div></article>';
+      if (staticFeatured) staticFeatured.hidden = true;
+      if (staticLocalFeatured) staticLocalFeatured.hidden = true;
+      if (staticCards) staticCards.hidden = true;
     }
   }
 
