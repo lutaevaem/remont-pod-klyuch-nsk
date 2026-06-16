@@ -5,6 +5,23 @@ function hasScriptBySrc(part) {
   return Array.from(document.scripts).some((script) => script.src && script.src.includes(part));
 }
 
+function hasStylesheetByHref(part) {
+  return Array.from(document.styleSheets).some((sheet) => sheet.href && sheet.href.includes(part));
+}
+
+function loadStylesheet(href, marker) {
+  if (document.querySelector(`link[data-style-marker="${marker}"]`) || hasStylesheetByHref(href)) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  link.dataset.styleMarker = marker;
+  document.head.appendChild(link);
+}
+
+function loadMobilePolish() {
+  loadStylesheet('/mobile-polish.css?v=1', 'mobile-polish');
+}
+
 function loadFavicon() {
   if (document.querySelector('script[data-site-favicon]') || hasScriptBySrc('/site-favicon.js')) return;
   const script = document.createElement('script');
@@ -176,6 +193,7 @@ async function saveLeadToSupabase(payload) {
   }
 }
 
+loadMobilePolish();
 loadFavicon();
 loadSupabasePublic();
 loadHomeProjects();
