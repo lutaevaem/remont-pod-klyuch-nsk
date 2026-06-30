@@ -112,7 +112,20 @@ function collectUtm() {
 }
 
 function applyProjectFilter(filter) {
-  const projectItems = document.querySelectorAll('.project-item[data-category]');
+  const dynamicProjectItems = document.querySelectorAll(
+    '#dynamic-featured-project .project-item[data-category], #dynamic-projects .project-item[data-category]'
+  );
+  const projectItems = dynamicProjectItems.length
+    ? dynamicProjectItems
+    : document.querySelectorAll('#static-featured-project.project-fallback[data-category], #static-project-cards .project-item[data-category]');
+
+  if (dynamicProjectItems.length) {
+    document.querySelectorAll('.local-case-card, .project-fallback').forEach((item) => {
+      item.hidden = true;
+      item.classList.add('project-filter-hidden');
+    });
+  }
+
   projectItems.forEach((item) => {
     const categories = item.dataset.category.split(' ').filter(Boolean);
     const shouldHide = !(filter === 'all' || categories.includes(filter));
