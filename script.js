@@ -111,19 +111,27 @@ function collectUtm() {
   }, {});
 }
 
+function applyProjectFilter(filter) {
+  const projectItems = document.querySelectorAll('.project-item[data-category]');
+  projectItems.forEach((item) => {
+    const categories = item.dataset.category.split(' ').filter(Boolean);
+    const shouldHide = !(filter === 'all' || categories.includes(filter));
+    item.hidden = shouldHide;
+    item.classList.toggle('project-filter-hidden', shouldHide);
+  });
+}
+
+window.applyProjectFilter = applyProjectFilter;
+
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll('.project-filters button[data-filter]');
   if (!filterButtons.length) return;
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const filter = button.dataset.filter;
-      const projectItems = document.querySelectorAll('.project-item[data-category]');
       filterButtons.forEach((item) => item.classList.remove('active'));
       button.classList.add('active');
-      projectItems.forEach((item) => {
-        const categories = item.dataset.category.split(' ');
-        item.hidden = !(filter === 'all' || categories.includes(filter));
-      });
+      applyProjectFilter(filter);
       reachGoal('project_filter_click', { filter });
     });
   });

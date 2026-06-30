@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return map[category] || category || 'apartment';
   }
 
+  function projectFilterCategories(project) {
+    if (project?.slug === 'dom-s-nulya-prostranstvo-dlya-zhizni') return 'building house furnishing';
+    return categoryToFilter(project?.category);
+  }
+
   function categoryLabel(category) {
     const map = { apartment: 'Квартира', house: 'Дом', building: 'Строительство', commercial: 'Коммерция', furnishing: 'Комплектация' };
     return map[category] || 'Проект';
@@ -73,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
       #static-featured-project[hidden],
       #static-project-cards[hidden],
       .local-case-card[hidden] {
+        display: none !important;
+      }
+      .project-item.project-filter-hidden,
+      #dynamic-projects .unified-project-card[hidden],
+      #dynamic-featured-project .dynamic-featured-case[hidden] {
         display: none !important;
       }
       #dynamic-projects.dynamic-project-grid {
@@ -426,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
 
     featuredContainer.innerHTML = `
-      <div class="container dynamic-featured-case project-item" data-category="${escapeHtml(categoryToFilter(project.category))}">
+      <div class="container dynamic-featured-case project-item" data-category="${escapeHtml(projectFilterCategories(project))}">
         <div class="dynamic-featured-media">
           <div class="featured-project-carousel">
             ${slides || `<a class="featured-project-carousel__slide" href="${escapeHtml(projectUrl)}" style="--slide-index:0;--slide-count:1;"><span class="featured-project-carousel__label">${escapeHtml(categoryLabel(project.category))}</span></a>`}
@@ -460,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const preview = getPreviewImage(project);
       const projectUrl = getProjectUrl(project);
       return `
-        <article class="project-card project-item unified-project-card" data-category="${escapeHtml(categoryToFilter(project.category))}">
+        <article class="project-card project-item unified-project-card" data-category="${escapeHtml(projectFilterCategories(project))}">
           <a class="project-photo${preview ? ' has-image' : ''}" href="${escapeHtml(projectUrl)}">
             ${preview ? `<img src="${escapeHtml(preview)}" alt="${escapeHtml(project.title)}" loading="lazy">` : ''}
             <span>${escapeHtml(categoryLabel(project.category))}</span>
@@ -516,6 +526,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         renderProjectCards(data);
       }
+
+      const activeFilter = document.querySelector('.project-filters button.active[data-filter]')?.dataset.filter || 'all';
+      if (typeof window.applyProjectFilter === 'function') window.applyProjectFilter(activeFilter);
     } catch (error) {
       console.error('Projects loading failed:', error);
       if (featuredContainer) featuredContainer.innerHTML = '';
