@@ -18,8 +18,171 @@ function loadStylesheet(href, marker) {
   document.head.appendChild(link);
 }
 
+function injectMobileInteractionStyles() {
+  if (document.querySelector('#mobile-interaction-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'mobile-interaction-styles';
+  style.textContent = `
+    .mobile-menu-button,
+    .mobile-menu-panel { display: none; }
+
+    .cookie-banner {
+      position: fixed;
+      left: max(18px, calc((100vw - 1180px) / 2));
+      right: max(18px, calc((100vw - 1180px) / 2));
+      bottom: 18px;
+      z-index: 95;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 16px 18px;
+      border: 1px solid rgba(224,187,114,.30);
+      border-radius: 24px;
+      background: rgba(17,16,14,.94);
+      color: #f7f1e8;
+      box-shadow: 0 22px 80px rgba(0,0,0,.34);
+      backdrop-filter: blur(18px);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+    .cookie-banner.is-hidden { opacity: 0; transform: translateY(12px); }
+    .cookie-banner__copy b { display: block; color: #e0bb72; font-size: 13px; line-height: 1.1; margin-bottom: 5px; }
+    .cookie-banner__copy p { margin: 0; color: #d8d0c3; font-size: 12px; line-height: 1.45; }
+    .cookie-banner__actions { display: flex; gap: 9px; align-items: center; }
+    .cookie-banner__actions a,
+    .cookie-banner__actions button {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .cookie-banner__actions a { border: 1px solid rgba(224,187,114,.24); color: #f7f1e8; background: rgba(255,255,255,.045); }
+    .cookie-banner__actions button { border: 0; color: #17120a; background: linear-gradient(135deg,#e0bb72,#caa15a); }
+
+    @media (max-width: 760px) {
+      .site-header {
+        grid-template-columns: auto minmax(0,1fr) auto !important;
+        align-items: center !important;
+        position: sticky;
+      }
+      .mobile-menu-button {
+        display: inline-grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        gap: 4px;
+        padding: 9px;
+        border: 1px solid rgba(224,187,114,.34);
+        border-radius: 14px;
+        background: rgba(255,255,255,.045);
+        color: #e0bb72;
+        cursor: pointer;
+      }
+      .mobile-menu-button span {
+        display: block;
+        width: 17px;
+        height: 2px;
+        border-radius: 999px;
+        background: currentColor;
+        transition: transform .2s ease, opacity .2s ease;
+      }
+      .mobile-menu-button.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      .mobile-menu-button.is-open span:nth-child(2) { opacity: 0; }
+      .mobile-menu-button.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+      .site-header > .brand { justify-self: start; }
+      .site-header > .nav { display: none !important; }
+      .mobile-menu-panel {
+        grid-column: 1 / -1;
+        margin-top: 2px;
+        padding: 12px;
+        border: 1px solid rgba(224,187,114,.24);
+        border-radius: 22px;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(224,187,114,.13), transparent 38%),
+          rgba(18,16,13,.97);
+        box-shadow: 0 18px 58px rgba(0,0,0,.30);
+        transform: translateY(-4px);
+        opacity: 0;
+        transition: opacity .2s ease, transform .2s ease;
+      }
+      .mobile-menu-panel[hidden] { display: none !important; }
+      .mobile-menu-panel.is-open { display: block; opacity: 1; transform: translateY(0); }
+      .mobile-menu-panel__links { display: grid; gap: 7px; }
+      .mobile-menu-panel__links a {
+        display: flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 14px;
+        border: 1px solid rgba(224,187,114,.16);
+        border-radius: 16px;
+        background: rgba(255,255,255,.045);
+        color: #f7f1e8;
+        font-size: 13px;
+        font-weight: 900;
+      }
+      .mobile-menu-panel__links a::after { content: '→'; color: #e0bb72; }
+      .mobile-menu-panel__links a[aria-current='page'] {
+        border-color: rgba(224,187,114,.42);
+        background: rgba(224,187,114,.10);
+        color: #e0bb72;
+      }
+      .mobile-menu-panel__actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 10px;
+      }
+      .mobile-menu-panel__actions a {
+        display: inline-flex;
+        min-height: 38px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 8px;
+        border-radius: 14px;
+        background: linear-gradient(135deg,#e0bb72,#caa15a);
+        color: #17120a;
+        font-size: 10px;
+        line-height: 1.05;
+        font-weight: 900;
+        text-align: center;
+      }
+      .cookie-banner {
+        left: 10px;
+        right: 10px;
+        bottom: calc(70px + env(safe-area-inset-bottom));
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 14px;
+        border-radius: 22px;
+      }
+      .cookie-banner__copy b { font-size: 13px; }
+      .cookie-banner__copy p { font-size: 11px; line-height: 1.42; }
+      .cookie-banner__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .cookie-banner__actions a,
+      .cookie-banner__actions button { width: 100%; min-height: 38px; font-size: 11px; }
+    }
+
+    @media (max-width: 390px) {
+      .mobile-menu-panel__actions { grid-template-columns: 1fr; }
+      .mobile-menu-panel__actions a { min-height: 36px; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function loadMobilePolish() {
   loadStylesheet('/mobile-polish.css?v=2', 'mobile-polish');
+  injectMobileInteractionStyles();
 }
 
 function loadFavicon() {
