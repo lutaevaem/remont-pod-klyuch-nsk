@@ -19,7 +19,7 @@ function loadStylesheet(href, marker) {
 }
 
 function loadMobilePolish() {
-  loadStylesheet('/mobile-polish.css?v=1', 'mobile-polish');
+  loadStylesheet('/mobile-polish.css?v=2', 'mobile-polish');
 }
 
 function loadFavicon() {
@@ -29,6 +29,76 @@ function loadFavicon() {
   script.defer = true;
   script.dataset.siteFavicon = 'true';
   document.head.appendChild(script);
+}
+
+function initMobileMenu() {
+  const header = document.querySelector('.site-header');
+  const nav = header?.querySelector('.nav');
+  if (!header || !nav || header.querySelector('.mobile-menu-button')) return;
+
+  const menuButton = document.createElement('button');
+  menuButton.className = 'mobile-menu-button';
+  menuButton.type = 'button';
+  menuButton.setAttribute('aria-label', 'Открыть меню');
+  menuButton.setAttribute('aria-expanded', 'false');
+  menuButton.innerHTML = '<span></span><span></span><span></span>';
+
+  const panel = document.createElement('div');
+  panel.className = 'mobile-menu-panel';
+  panel.hidden = true;
+  panel.setAttribute('aria-label', 'Мобильное меню');
+
+  const links = Array.from(nav.querySelectorAll('a')).map((link) => {
+    const href = link.getAttribute('href') || '#';
+    const current = link.getAttribute('aria-current') ? ' aria-current="page"' : '';
+    return `<a href="${href}"${current}>${link.textContent.trim()}</a>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="mobile-menu-panel__links">${links}</div>
+    <div class="mobile-menu-panel__actions">
+      <a href="tel:+79137998808">Позвонить</a>
+      <a href="https://t.me/UsoltcevAG" target="_blank" rel="noreferrer">Telegram</a>
+      <a href="https://wa.me/79137998808" target="_blank" rel="noreferrer">WhatsApp</a>
+    </div>
+  `;
+
+  function closeMenu() {
+    menuButton.classList.remove('is-open');
+    panel.classList.remove('is-open');
+    panel.hidden = true;
+    menuButton.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('mobile-menu-open');
+  }
+
+  function openMenu() {
+    menuButton.classList.add('is-open');
+    panel.hidden = false;
+    requestAnimationFrame(() => panel.classList.add('is-open'));
+    menuButton.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('mobile-menu-open');
+  }
+
+  menuButton.addEventListener('click', () => {
+    const isOpen = menuButton.classList.contains('is-open');
+    if (isOpen) closeMenu(); else openMenu();
+  });
+
+  panel.addEventListener('click', (event) => {
+    if (event.target.closest('a')) closeMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!menuButton.classList.contains('is-open')) return;
+    if (!header.contains(event.target)) closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+
+  header.insertBefore(menuButton, header.firstElementChild);
+  header.appendChild(panel);
 }
 
 function loadHomeProjects() {
@@ -152,13 +222,26 @@ function initProjectFilters() {
 
 function initCookieBanner() {
   if (localStorage.getItem('cookieConsentAccepted') === 'yes') return;
+  if (document.querySelector('.cookie-banner')) return;
+
   const banner = document.createElement('div');
   banner.className = 'cookie-banner';
-  banner.innerHTML = `<p>Мы используем cookie и сервисы аналитики, чтобы сайт работал корректно и помогал улучшать качество сервиса. Продолжая пользоваться сайтом, вы соглашаетесь с использованием cookie. Подробнее — в <a href="/privacy/">Политике обработки персональных данных</a>.</p><button type="button">Хорошо</button>`;
+  banner.setAttribute('role', 'status');
+  banner.innerHTML = `
+    <div class="cookie-banner__copy">
+      <b>Используем cookie</b>
+      <p>Они помогают сайту работать корректно и улучшать сервис. Продолжая пользоваться сайтом, вы соглашаетесь с политикой обработки данных.</p>
+    </div>
+    <div class="cookie-banner__actions">
+      <a href="/privacy/">Подробнее</a>
+      <button type="button">Хорошо</button>
+    </div>
+  `;
   document.body.appendChild(banner);
   banner.querySelector('button').addEventListener('click', () => {
     localStorage.setItem('cookieConsentAccepted', 'yes');
-    banner.remove();
+    banner.classList.add('is-hidden');
+    setTimeout(() => banner.remove(), 240);
   });
 }
 
@@ -216,6 +299,7 @@ async function saveLeadToSupabase(payload) {
 
 loadMobilePolish();
 loadFavicon();
+initMobileMenu();
 loadSupabasePublic();
 loadHomeProjects();
 loadMetrika();
