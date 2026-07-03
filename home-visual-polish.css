@@ -1,0 +1,370 @@
+/* Home page: visual rhythm and stronger expert block */
+.home-page .intro-strip{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(224,187,114,.16), transparent 30%),
+    linear-gradient(180deg,#0c0b09 0%,#15120e 100%);
+}
+
+.home-page .difference-grid{
+  gap:12px;
+  border:0;
+  overflow:visible;
+}
+
+.home-page .difference-grid article{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(224,187,114,.20);
+  border-radius:28px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.070),rgba(255,255,255,.025));
+  box-shadow:0 20px 54px rgba(0,0,0,.18);
+}
+
+.home-page .difference-grid article::after{
+  content:"";
+  position:absolute;
+  inset:auto 22px 0 22px;
+  height:2px;
+  border-radius:999px 999px 0 0;
+  background:linear-gradient(90deg,transparent,#e0bb72,transparent);
+  opacity:.72;
+}
+
+.home-page .difference-grid article:nth-child(2){
+  background:
+    radial-gradient(circle at 18% 0%, rgba(224,187,114,.18), transparent 42%),
+    linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.032));
+  transform:translateY(-8px);
+}
+
+.home-page .difference-grid span{
+  display:inline-grid;
+  width:42px;
+  height:42px;
+  place-items:center;
+  border:1px solid rgba(224,187,114,.42);
+  border-radius:15px;
+  background:rgba(224,187,114,.08);
+  color:#e0bb72;
+}
+
+.home-page #services{
+  position:relative;
+  overflow:hidden;
+}
+
+.home-page #services::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 86% 12%, rgba(224,187,114,.14), transparent 30%),
+    radial-gradient(circle at 8% 88%, rgba(224,187,114,.08), transparent 34%);
+}
+
+.home-page #services > .container{
+  position:relative;
+  z-index:1;
+}
+
+.home-page #services .route-grid{
+  counter-reset:service;
+}
+
+.home-page #services .route-grid article{
+  counter-increment:service;
+  position:relative;
+  overflow:hidden;
+  min-height:250px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  border:1px solid rgba(224,187,114,.24);
+  background:
+    linear-gradient(150deg,rgba(255,255,255,.075),rgba(255,255,255,.025)),
+    #15130f;
+  color:#f7f3ea;
+  box-shadow:0 20px 64px rgba(0,0,0,.22);
+}
+
+.home-page #services .route-grid article::before{
+  content:"0" counter(service);
+  position:absolute;
+  top:22px;
+  left:22px;
+  display:inline-grid;
+  width:46px;
+  height:46px;
+  place-items:center;
+  border:1px solid rgba(224,187,114,.38);
+  border-radius:16px;
+  background:rgba(224,187,114,.08);
+  color:#e0bb72;
+  font-size:13px;
+  font-weight:900;
+}
+
+.home-page #services .route-grid article::after{
+  content:"→";
+  position:absolute;
+  top:23px;
+  right:24px;
+  color:#e0bb72;
+  font-size:24px;
+  line-height:1;
+}
+
+.home-page #services .route-grid article:nth-child(2){
+  background:
+    radial-gradient(circle at 50% 0%, rgba(224,187,114,.18), transparent 42%),
+    linear-gradient(150deg,rgba(255,255,255,.085),rgba(255,255,255,.025)),
+    #15130f;
+  transform:translateY(-10px);
+}
+
+.home-page #services .route-grid article b{
+  color:#fffaf2;
+  font-size:26px;
+  letter-spacing:-.035em;
+}
+
+.home-page #services .route-grid article p{
+  color:#cfc5b8;
+  font-size:16px;
+  line-height:1.55;
+}
+
+.home-page .premium-about{
+  position:relative;
+  overflow:hidden;
+  grid-template-columns:.82fr 1.18fr;
+  gap:36px;
+  padding:38px;
+  border:1px solid rgba(202,161,90,.26);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(224,187,114,.22), transparent 35%),
+    linear-gradient(135deg,#fffdf8 0%,#f6ead8 54%,#fffaf2 100%);
+}
+
+.home-page .premium-about::before{
+  content:"личная ответственность";
+  position:absolute;
+  right:26px;
+  top:22px;
+  max-width:180px;
+  color:rgba(157,113,51,.18);
+  font-size:12px;
+  line-height:1.05;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  text-align:right;
+}
+
+.home-page .about-photo{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  min-height:430px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(224,187,114,.22), transparent 28%),
+    linear-gradient(150deg,#211b14 0%,#0f0d0a 74%);
+  color:transparent;
+  box-shadow:inset 0 0 0 1px rgba(224,187,114,.22),0 24px 72px rgba(30,20,8,.22);
+}
+
+.home-page .about-photo::before{
+  content:"АУ";
+  position:absolute;
+  inset:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(224,187,114,.32);
+  border-radius:26px;
+  color:#e0bb72;
+  font-family:Georgia,serif;
+  font-size:74px;
+  font-style:italic;
+  font-weight:400;
+}
+
+.home-page .about-photo::after{
+  content:"Александр Усольцев\Aпространства под ключ";
+  white-space:pre-line;
+  position:absolute;
+  left:24px;
+  right:24px;
+  bottom:24px;
+  padding:16px;
+  border:1px solid rgba(224,187,114,.28);
+  border-radius:20px;
+  background:rgba(17,16,14,.76);
+  color:#f7f1e8;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  backdrop-filter:blur(14px);
+}
+
+.home-page .premium-about h2{
+  max-width:760px;
+}
+
+.home-page .premium-about .quote-card{
+  position:relative;
+  margin:24px 0;
+  padding:24px 24px 24px 28px;
+  border:0;
+  border-radius:24px;
+  background:#15130f;
+  color:#f7f1e8;
+  box-shadow:0 18px 50px rgba(30,20,8,.12);
+}
+
+.home-page .premium-about .quote-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:18px;
+  bottom:18px;
+  width:4px;
+  border-radius:999px;
+  background:linear-gradient(#e0bb72,#caa15a);
+}
+
+.home-page .premium-about .principles{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.home-page .premium-about .principles li{
+  display:flex;
+  align-items:center;
+  min-height:44px;
+  padding:10px 13px;
+  border:1px solid rgba(202,161,90,.22);
+  border-radius:16px;
+  background:#fffaf2;
+  color:#5f4522;
+  font-size:12px;
+  letter-spacing:.02em;
+}
+
+.home-page .premium-about .principles li::before{
+  content:"•";
+  margin-right:8px;
+  color:#caa15a;
+  font-size:20px;
+  line-height:1;
+}
+
+.home-page .lead-form .legal-consents{
+  padding:12px;
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(224,187,114,.12);
+}
+
+.home-page .lead-form .consent-line span,
+.home-page .lead-form .legal-note{
+  font-size:11px;
+  line-height:1.42;
+  color:#c8beb0;
+}
+
+@media(max-width:760px){
+  .home-page .difference-grid{
+    gap:10px!important;
+  }
+
+  .home-page .difference-grid article:nth-child(2),
+  .home-page #services .route-grid article:nth-child(2){
+    transform:none;
+  }
+
+  .home-page .difference-grid article{
+    padding:20px!important;
+  }
+
+  .home-page .difference-grid span{
+    width:36px;
+    height:36px;
+    border-radius:13px;
+    font-size:12px;
+  }
+
+  .home-page #services .route-grid article{
+    min-height:184px;
+    padding:72px 20px 20px!important;
+  }
+
+  .home-page #services .route-grid article b{
+    font-size:23px!important;
+  }
+
+  .home-page #services .route-grid article p{
+    font-size:14px!important;
+  }
+
+  .home-page .premium-about{
+    grid-template-columns:1fr!important;
+    padding:18px!important;
+    border-radius:28px!important;
+    gap:18px!important;
+  }
+
+  .home-page .premium-about::before{
+    display:none;
+  }
+
+  .home-page .about-photo{
+    min-height:250px;
+    height:250px!important;
+    border-radius:24px!important;
+  }
+
+  .home-page .about-photo::before{
+    inset:22px;
+    border-radius:20px;
+    font-size:52px;
+  }
+
+  .home-page .about-photo::after{
+    left:14px;
+    right:14px;
+    bottom:14px;
+    padding:13px;
+    border-radius:16px;
+    font-size:11px;
+  }
+
+  .home-page .premium-about .quote-card{
+    padding:20px 18px 20px 22px!important;
+    border-radius:20px!important;
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+
+  .home-page .premium-about .principles{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .home-page .premium-about .principles li{
+    min-height:40px;
+    border-radius:14px;
+    font-size:11px!important;
+  }
+
+  .home-page .lead-form .legal-consents{
+    padding:10px!important;
+    border-radius:16px!important;
+  }
+}
